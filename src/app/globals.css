@@ -1,0 +1,179 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import "tailwindcss";
+
+/* NanumSquareNeo 폰트 설정 */
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 300;
+  src: url('/asset/fonts/NanumSquareNeo-aLt.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 400;
+  src: url('/asset/fonts/NanumSquareNeo-bRg.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 500;
+  src: url('/asset/fonts/NanumSquareNeo-cBd.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 600;
+  src: url('/asset/fonts/NanumSquareNeo-dEb.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 700;
+  src: url('/asset/fonts/NanumSquareNeo-eHv.ttf') format('truetype');
+  font-display: swap;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #5983bd; /* 강남ENG 주요 컬러 */
+  --primary-light: #7098cc;
+  --secondary: #e5e5e5;
+  --accent: #144990;
+  --font-sans: 'NanumSquareNeo', sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-sans);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --primary: #5983bd;
+    --secondary: #333333;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'NanumSquareNeo', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+
+@layer components {
+  .container-wrapper {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section-padding {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+}
+
+/* 스크롤 애니메이션을 위한 클래스 */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 메인 콘텐츠 스타일 */
+.main_conTitle h2 {
+  color: #333;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.main_conTitle strong {
+  display: block;
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: 15px;
+}
+
+.main_conTitle p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 제품 메뉴 리스트 스타일 */
+.main_menuList {
+  @apply grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-10;
+}
+
+.main_menuList li {
+  @apply relative overflow-hidden rounded shadow-md transition-all;
+}
+
+.main_menuList li a {
+  @apply block relative h-52 bg-gray-100 p-6 transition-all hover:bg-blue-50;
+}
+
+.main_menuList li h3 {
+  @apply text-xl font-bold text-primary mb-4;
+}
+
+.main_menuList li p {
+  @apply text-gray-600;
+}
+
+.main_menuList li span {
+  @apply absolute bottom-6 right-6 text-xl font-bold transition-transform;
+}
+
+.main_menuList li:hover span {
+  @apply transform rotate-90;
+}
+
+/* 고객센터 스타일 */
+.main_cs h3 {
+  @apply text-2xl font-bold text-primary mb-2;
+}
+
+.main_cs span {
+  @apply text-gray-500 text-sm;
+}
+
+.main_cs ul {
+  @apply space-y-2 mt-4;
+}
+
+.main_cs li a {
+  @apply text-lg hover:text-primary transition-colors;
+}
+
+.main_cs p {
+  @apply mt-4 text-gray-600;
+}
+
+/* 회사 소개 링크 스타일 */
+.main_ban {
+  @apply block relative overflow-hidden transition-all hover:bg-gray-50;
+}
+
+.main_ban h3 {
+  @apply text-2xl font-bold text-primary mb-2;
+}
+
+.main_ban .more_btn {
+  @apply text-primary font-medium;
+}
