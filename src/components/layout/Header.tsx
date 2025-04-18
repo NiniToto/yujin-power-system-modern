@@ -90,7 +90,7 @@ const Header = () => {
 
   // 텍스트 색상 결정
   const getTextColorClass = () => {
-    return hasBackground && !isHomePage ? 'text-gray-800' : 'text-white';
+    return hasBackground ? 'text-black' : 'text-white';
   };
 
   return (
@@ -126,7 +126,7 @@ const Header = () => {
                   <Link
                     href={item.href}
                     className={`py-2 transition-colors ${
-                      hasBackground && !isHomePage
+                      hasBackground
                         ? 'text-gray-800 hover:text-gray-600' 
                         : 'text-white hover:text-gray-200'
                     }`}

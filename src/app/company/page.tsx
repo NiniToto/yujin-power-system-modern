@@ -7,14 +7,10 @@ import Image from 'next/image';
 const CompanyPage = () => {
   const controls = useAnimation();
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
   const [activeTab, setActiveTab] = useState('ceo');
 
   useEffect(() => {
-    if (isInView) {
-      controls.start('visible');
-    }
-
     // URL 해시에 따라 탭 활성화
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
@@ -23,17 +19,26 @@ const CompanyPage = () => {
       }
     };
 
-    handleHashChange();
+    handleHashChange(); // 초기 로드 시 실행
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [controls, isInView]);
+  }, []);
+  
+  // 별도의 useEffect로 애니메이션 제어
+  useEffect(() => {
+    if (isInView) {
+      controls.start('visible');
+    } else {
+      controls.start('hidden');
+    }
+  }, [isInView, controls]);
 
   const sectionVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' },
+      transition: { duration: 0.5, ease: 'easeOut' },
     },
   };
 
@@ -73,115 +78,129 @@ const CompanyPage = () => {
 
   return (
     <>
-      {/* 페이지 헤더 */}
-      <div className="bg-primary text-white py-24 mt-16">
-        <div className="container-wrapper text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">회사소개</h1>
-          <p className="text-xl text-gray-200">
+      {/* 페이지 헤더 - 배경 이미지 */}
+      <div className="relative h-[220px] mt-16 flex items-center justify-center text-center overflow-hidden">
+        {/* 배경 이미지 */}
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/asset/images/company.jpg" 
+            alt="유진파워시스템 회사소개" 
+            fill 
+            priority
+            className="object-cover" 
+          />
+        </div>
+        
+        {/* 컨텐츠 */}
+        <div className="container-wrapper relative z-20 px-4">
+          <p className="text-base md:text-lg text-gray-200 max-w-2xl mx-auto">
             풍부한 경험과 기술력으로 신뢰받는 파트너, 유진파워시스템을 소개합니다.
           </p>
         </div>
       </div>
 
       {/* 탭 네비게이션 */}
-      <div className="bg-gray-100 border-b">
+      <div className="bg-white shadow-sm sticky top-[70px] z-30">
         <div className="container-wrapper">
           <nav className="flex overflow-x-auto">
             <button
-              className={`px-6 py-4 font-medium whitespace-nowrap ${
+              type="button"
+              className={`px-6 py-3 font-medium whitespace-nowrap transition-all ${
                 activeTab === 'ceo'
-                  ? 'text-primary border-b-2 border-primary'
+                  ? 'text-primary border-b-2 border-primary font-semibold'
                   : 'text-gray-600 hover:text-primary'
               }`}
               onClick={() => {
                 setActiveTab('ceo');
-                window.history.pushState(null, '', '#ceo');
+                window.location.hash = 'ceo';
               }}
             >
-              CEO 인사말
+              인사말
             </button>
             <button
-              className={`px-6 py-4 font-medium whitespace-nowrap ${
+              type="button"
+              className={`px-6 py-3 font-medium whitespace-nowrap transition-all ${
                 activeTab === 'history'
-                  ? 'text-primary border-b-2 border-primary'
+                  ? 'text-primary border-b-2 border-primary font-semibold'
                   : 'text-gray-600 hover:text-primary'
               }`}
               onClick={() => {
                 setActiveTab('history');
-                window.history.pushState(null, '', '#history');
+                window.location.hash = 'history';
               }}
             >
               회사연혁
             </button>
             <button
-              className={`px-6 py-4 font-medium whitespace-nowrap ${
+              type="button"
+              className={`px-6 py-3 font-medium whitespace-nowrap transition-all ${
                 activeTab === 'vision'
-                  ? 'text-primary border-b-2 border-primary'
+                  ? 'text-primary border-b-2 border-primary font-semibold'
                   : 'text-gray-600 hover:text-primary'
               }`}
               onClick={() => {
                 setActiveTab('vision');
-                window.history.pushState(null, '', '#vision');
+                window.location.hash = 'vision';
               }}
             >
-              비전/미션
+              Vision
             </button>
           </nav>
         </div>
       </div>
 
       {/* 컨텐츠 영역 */}
-      <div className="container-wrapper py-16" ref={ref}>
+      <div className="container-wrapper py-8" ref={ref}>
         {/* CEO 인사말 */}
         {activeTab === 'ceo' && (
           <motion.div
             variants={sectionVariants}
             initial="hidden"
-            animate={controls}
-            className="grid grid-cols-1 lg:grid-cols-5 gap-12"
+            animate="visible"
+            className="max-w-7xl mx-auto"
           >
-            <div className="lg:col-span-2">
-              <div className="bg-gray-200 rounded-lg h-96 relative overflow-hidden">
-                {/* 실제 이미지가 있을 경우 아래 주석을 해제하고 사용 */}
-                {/* <Image 
-                  src="/ceo.jpg" 
-                  alt="유진파워시스템 CEO" 
-                  fill 
-                  className="object-cover" 
-                /> */}
-                
-                {/* 임시 컨텐츠 */}
-                <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                  <span className="text-xl">CEO 이미지</span>
+            <div className="bg-white rounded-lg overflow-hidden shadow-md h-[550px]">
+              <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
+                <div className="bg-gray-100 h-full relative">
+                  <Image 
+                    src="/asset/images/ceo.png" 
+                    alt="유진파워시스템 CEO" 
+                    fill 
+                    className="object-cover object-center" 
+                  />
                 </div>
-              </div>
-            </div>
-            
-            <div className="lg:col-span-3">
-              <h2 className="text-3xl font-bold text-primary mb-6">
-                안녕하십니까, 유진파워시스템 대표이사 입니다.
-              </h2>
-              
-              <div className="text-gray-700 space-y-4">
-                <p>
-                  저희 유진파워시스템을 방문해 주셔서 진심으로 감사드립니다. 저희는 설립 이래 '풍부한 경험과 최고의 기술력'이라는 모토로 고객 여러분과 함께 성장해 왔습니다.
-                </p>
                 
-                <p>
-                  현대 산업 현장에서 끊임없이 변화하는 요구사항에 대응하기 위해, 유진파워시스템은 항상 새로운 기술 개발과 혁신을 추구하고 있습니다. 특히 부품 국산화를 통해 국내 산업 발전에 기여하고, 해외 의존도를 낮추는 데 앞장서고 있습니다.
-                </p>
-                
-                <p>
-                  저희는 단순히 제품을 공급하는 기업이 아닌, 고객의 문제를 함께 해결하는 파트너가 되기 위해 노력하고 있습니다. 고객의 요구를 정확히 파악하고, 최상의 솔루션을 제공함으로써 고객 만족을 실현하는 것이 저희의 가장 큰 목표입니다.
-                </p>
-                
-                <p>
-                  앞으로도 유진파워시스템은 지속적인 연구개발과 품질 향상을 통해 산업 발전에 기여하며, 신뢰받는 기업으로 성장해 나갈 것을 약속드립니다. 여러분의 지속적인 관심과 성원 부탁드립니다.
-                </p>
-                
-                <p className="pt-4 font-semibold text-right">
-                  유진파워시스템 대표이사 홍길동
-                </p>
+                <div className="px-5 py-6 lg:p-8 flex flex-col">
+                  <div className="flex flex-col justify-center h-full">
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-5 leading-tight">
+                      안녕하십니까, 유진파워시스템 대표이사 입니다.
+                    </h2>
+                    
+                    <div className="text-gray-700 space-y-4">
+                      <p className="text-base">
+                        저희 유진파워시스템을 방문해 주셔서 진심으로 감사드립니다. 저희는 설립 이래 &apos;풍부한 경험과 최고의 기술력&apos;이라는 모토로 고객 여러분과 함께 성장해 왔습니다.
+                      </p>
+                      
+                      <p className="text-base">
+                        현대 산업 현장에서 끊임없이 변화하는 요구사항에 대응하기 위해, 유진파워시스템은 항상 새로운 기술 개발과 혁신을 추구하고 있습니다. 특히 부품 국산화를 통해 국내 산업 발전에 기여하고, 해외 의존도를 낮추는 데 앞장서고 있습니다.
+                      </p>
+                      
+                      <p className="text-base">
+                        저희는 단순히 제품을 공급하는 기업이 아닌, 고객의 문제를 함께 해결하는 파트너가 되기 위해 노력하고 있습니다. 고객의 요구를 정확히 파악하고, 최상의 솔루션을 제공함으로써 고객 만족을 실현하는 것이 저희의 가장 큰 목표입니다.
+                      </p>
+                      
+                      <p className="text-base">
+                        앞으로도 유진파워시스템은 지속적인 연구개발과 품질 향상을 통해 산업 발전에 기여하며, 신뢰받는 기업으로 성장해 나갈 것을 약속드립니다. 여러분의 지속적인 관심과 성원 부탁드립니다.
+                      </p>
+                    </div>
+                  
+                    <div className="border-t border-gray-200 pt-4 mt-6">
+                      <p className="font-semibold text-right text-gray-900">
+                        유진파워시스템 대표이사 홍길동
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -192,112 +211,191 @@ const CompanyPage = () => {
           <motion.div
             variants={sectionVariants}
             initial="hidden"
-            animate={controls}
+            animate="visible"
+            className="max-w-6xl mx-auto"
           >
-            <h2 className="text-3xl font-bold text-primary mb-12 text-center">
-              회사연혁
-            </h2>
-            
-            <div className="relative border-l-2 border-primary ml-4 md:mx-auto md:max-w-3xl pl-8 pb-8">
-              {history.map((item, index) => (
-                <div
-                  key={item.year}
-                  className="mb-12 relative"
-                >
-                  <div className="absolute left-0 -translate-x-[calc(0.5rem+1px)] -translate-y-1/4 w-4 h-4 rounded-full bg-primary"></div>
-                  <div className="flex flex-col md:flex-row">
-                    <h3 className="text-2xl font-bold text-primary mb-4 md:mb-0 md:w-36">
-                      {item.year}
-                    </h3>
-                    <div className="flex-1">
-                      <ul className="space-y-3">
-                        {item.events.map((event, eventIndex) => (
-                          <li key={eventIndex} className="text-gray-700 flex">
-                            <span className="font-semibold min-w-20">{event.month}</span>
-                            <span>{event.description}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+            <div className="bg-white rounded-lg shadow-md h-[550px] p-5 flex flex-col">
+              <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">
+                회사연혁
+              </h2>
+              
+              <div className="flex-grow flex flex-col">
+                {/* 가로 흐름 타임라인 */}
+                <div className="flex-grow relative">
+                  {/* 배경 장식선 */}
+                  <div className="absolute top-1/3 left-0 right-0 h-0.5 bg-gray-100 z-0" />
+                  
+                  {/* 연혁 카드 그리드 */}
+                  <div className="grid grid-cols-4 gap-4 h-full">
+                    {history.slice().reverse().map((item) => (
+                      <div key={item.year} className="relative flex flex-col h-full">
+                        {/* 연도 배지 */}
+                        <div className="absolute left-1/2 top-0 transform -translate-x-1/2 z-10">
+                          <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-md">
+                            <span className="font-bold text-xs">{item.year}</span>
+                          </div>
+                          
+                          {/* 연결선 */}
+                          <div className="absolute left-1/2 top-full w-0.5 h-4 bg-primary transform -translate-x-1/2" />
+                        </div>
+                        
+                        {/* 이벤트 카드 */}
+                        <div className="mt-16 flex-grow bg-gray-50 rounded-lg shadow-sm p-3 border-t-2 border-primary">
+                          <div className="flex flex-col h-full">
+                            <h3 className="text-sm font-bold text-primary mb-2">
+                              {item.year}년
+                            </h3>
+                            
+                            <div className="flex-grow overflow-y-auto pr-1 scrollbar-hide">
+                              <div className="space-y-2">
+                                {item.events.map((event, eventIndex) => (
+                                  <div 
+                                    key={`${item.year}-${event.month}-${eventIndex}`} 
+                                    className="flex items-start hover:bg-white rounded-md p-1.5 transition-all duration-200 group"
+                                  >
+                                    <span 
+                                      className="text-xs font-semibold text-primary min-w-[32px] group-hover:scale-105 transition-transform duration-200"
+                                    >
+                                      {event.month}
+                                    </span>
+                                    <span className="text-xs text-gray-700 ml-1.5">{event.description}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
-            </div>
-            
-            <div className="text-center mt-12">
-              <div className="inline-block bg-gray-100 rounded-lg p-6 shadow-sm">
-                <p className="text-lg font-semibold text-primary mb-2">우리는 단단하게 성장하고 있어요</p>
-                <p className="text-gray-600">1994년 창립 이후 지속적인 기술 혁신과 성장을 이어가고 있습니다</p>
+                
+                {/* 바닥 연대표시선 */}
+                <div className="mt-4 relative h-6">
+                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/40 via-primary to-primary/40" />
+                  
+                  <div className="flex justify-between">
+                    {history.slice().reverse().map((item) => (
+                      <div key={item.year} className="relative">
+                        <div className="absolute top-0 w-0.5 h-2 bg-primary transform -translate-x-1/2" />
+                        <p className="text-xs font-medium text-primary mt-3 transform -translate-x-1/2">{item.year}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-center pt-3 border-t border-gray-200 mt-3">
+                <p className="text-sm text-primary font-medium">
+                  1994년 창립 이후 지속적인 기술 혁신과 성장을 이어가고 있습니다
+                </p>
               </div>
             </div>
           </motion.div>
         )}
 
-        {/* 비전/미션 */}
+        {/* Vision */}
         {activeTab === 'vision' && (
           <motion.div
             variants={sectionVariants}
             initial="hidden"
-            animate={controls}
-            className="max-w-4xl mx-auto"
+            animate="visible"
+            className="max-w-7xl mx-auto"
           >
-            <h2 className="text-3xl font-bold text-primary mb-12 text-center">
-              비전 및 미션
-            </h2>
-            
-            <div className="bg-primary text-white p-8 md:p-12 rounded-lg mb-12 text-center">
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">비전</h3>
-              <p className="text-xl">
-                "최고의 기술력으로 산업의 혁신을 이끌고, 지속 가능한 미래를 창조합니다."
-              </p>
-            </div>
-            
-            <div className="bg-gray-100 p-8 md:p-12 rounded-lg mb-12">
-              <h3 className="text-2xl font-bold mb-6 text-center">핵심 가치</h3>
+            <div className="bg-white rounded-lg shadow-md h-[550px] p-0 overflow-hidden relative">
+              {/* 배경 장식 */}
+              <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+                <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-primary" />
+                <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-primary" />
+              </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-                  <div className="text-primary text-4xl mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
+              <div className="h-full flex flex-col">
+                {/* 상단 비전 영역 */}
+                <div className="py-10 flex-none">
+                  <div className="text-center mb-8">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-2">Vision</h2>
+                    <div className="w-20 h-1 bg-primary mx-auto mb-3 rounded-full" />
+                    <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+                      최고의 기술력으로 산업의 혁신을 이끌고, 
+                      <span className="text-primary font-bold"> 지속 가능한 미래</span>를 창조합니다.
+                    </p>
                   </div>
-                  <h4 className="text-xl font-bold mb-2">신뢰</h4>
-                  <p className="text-gray-600">고객과의 약속을 지키고 신뢰 관계를 구축합니다.</p>
                 </div>
                 
-                <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-                  <div className="text-primary text-4xl mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+                {/* 핵심 가치 영역 */}
+                <div className="flex-grow px-20">
+                  <div className="mb-6 text-center">
+                    <h3 className="text-xl font-bold text-gray-900 inline-block border-b-2 border-primary pb-1">
+                      핵심 가치
+                    </h3>
                   </div>
-                  <h4 className="text-xl font-bold mb-2">혁신</h4>
-                  <p className="text-gray-600">끊임없는 연구와 개발로 기술 혁신을 추구합니다.</p>
+                  
+                  <div className="grid grid-cols-3 gap-8 mt-8">
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1, duration: 0.4 }}
+                      className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+                    >
+                      <div className="flex flex-col items-center text-center">
+                        <div className="bg-primary/10 p-4 rounded-full mb-4">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <title>신뢰 아이콘</title>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                          </svg>
+                        </div>
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">신뢰</h4>
+                        <p className="text-gray-600">고객과의 약속을 지키고 신뢰 관계를 구축합니다.</p>
+                      </div>
+                    </motion.div>
+                    
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2, duration: 0.4 }}
+                      className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+                    >
+                      <div className="flex flex-col items-center text-center">
+                        <div className="bg-primary/10 p-4 rounded-full mb-4">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <title>혁신 아이콘</title>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                          </svg>
+                        </div>
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">혁신</h4>
+                        <p className="text-gray-600">끊임없는 연구와 개발로 기술 혁신을 추구합니다.</p>
+                      </div>
+                    </motion.div>
+                    
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3, duration: 0.4 }}
+                      className="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+                    >
+                      <div className="flex flex-col items-center text-center">
+                        <div className="bg-primary/10 p-4 rounded-full mb-4">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <title>상생 아이콘</title>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">상생</h4>
+                        <p className="text-gray-600">고객, 사회와 함께 성장하는 상생의 가치를 추구합니다.</p>
+                      </div>
+                    </motion.div>
+                  </div>
                 </div>
                 
-                <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-                  <div className="text-primary text-4xl mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                {/* 하단 장식 */}
+                <div className="flex-none h-16 flex items-center justify-center">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-500">
+                      <span className="text-primary font-medium">유진파워시스템</span>은 고객과 함께 지속 가능한 미래를 만들어 갑니다.
+                    </p>
                   </div>
-                  <h4 className="text-xl font-bold mb-2">상생</h4>
-                  <p className="text-gray-600">고객, 사회와 함께 성장하는 상생의 가치를 추구합니다.</p>
                 </div>
               </div>
-            </div>
-            
-            <div className="text-center">
-              <h3 className="text-2xl font-bold mb-6">미션</h3>
-              <p className="text-xl text-gray-700 mb-8">
-                "기술과 혁신으로 산업 현장의 효율성을 높이고, 부품 국산화를 통해 국내 산업 발전에 기여합니다."
-              </p>
-              
-              <p className="text-gray-600">
-                유진파워시스템은 기술 개발과 품질 향상을 통해 국내 산업의 자립도를 높이고,<br />
-                글로벌 시장에서도 인정받는 기업으로 성장하기 위해 끊임없이 노력하고 있습니다.
-              </p>
             </div>
           </motion.div>
         )}

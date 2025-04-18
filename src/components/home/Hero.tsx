@@ -15,7 +15,7 @@ const heroSlides = [
     description: '풍부한 경험과 최고의 기술력으로 수입에만 의존하는 유도가열장치 및\nCGL GA INDUCTION HEATER BODY 및 DOOR 부품을 국산화하여\n고객의 요구에 부응할 만큼 개선하기 위하여 노력하고 있습니다.',
     globalText: 'GLOBAL CHAMPION',
     image: '/asset/images/hero1.jpg',
-    ctaText: '회사 소개',
+    ctaText: 'MORE',
     ctaLink: '/company',
   },
   {
@@ -25,7 +25,7 @@ const heroSlides = [
     description: '풍부한 경험과 최고의 기술력으로 수입에만 의존하는 유도가열장치 및\nCGL GA INDUCTION HEATER BODY 및 DOOR 부품을 국산화하여\n고객의 요구에 부응할 만큼 개선하기 위하여 노력하고 있습니다.',
     globalText: 'GLOBAL CHAMPION',
     image: '/asset/images/hero2.jpg',
-    ctaText: '제품 보기',
+    ctaText: 'MORE',
     ctaLink: '/product',
   },
   {
@@ -35,7 +35,7 @@ const heroSlides = [
     description: '풍부한 경험과 최고의 기술력으로 수입에만 의존하는 유도가열장치 및\nCGL GA INDUCTION HEATER BODY 및 DOOR 부품을 국산화하여\n고객의 요구에 부응할 만큼 개선하기 위하여 노력하고 있습니다.',
     globalText: 'GLOBAL CHAMPION',
     image: '/asset/images/hero3.jpg',
-    ctaText: '회사 소개',
+    ctaText: 'MORE',
     ctaLink: '/company',
   },
 ];
@@ -70,7 +70,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative w-full h-[880px] md:h-[880px] mt-[70px] md:mt-[70px] pt-[90px] md:pt-[100px] overflow-hidden">
+    <section className="relative w-full h-[580px] md:h-[580px] mt-[70px] md:mt-[70px] pt-[90px] md:pt-[100px] overflow-hidden">
       {/* 배경 이미지와 오버레이 */}
       {heroSlides.map((slide, index) => (
         <div
@@ -124,9 +124,14 @@ const Hero = () => {
                         
             <Link
               href={heroSlides[currentSlide].ctaLink}
-              className="inline-block bg-white text-blue-800 font-medium px-6 py-3 rounded-sm border border-blue-800 hover:bg-gray-100 transition-colors"
+              className="inline-flex items-center text-white font-medium hover:opacity-90 transition-opacity group"
             >
-              <strong>{heroSlides[currentSlide].ctaText}</strong>
+              <span className="mr-2">{heroSlides[currentSlide].ctaText}</span>
+              <span className="group-hover:translate-x-1 transition-transform duration-300 inline-block">
+                <svg width="24" height="8" viewBox="0 0 24 8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M23.3536 4.35355C23.5488 4.15829 23.5488 3.84171 23.3536 3.64645L20.1716 0.464466C19.9763 0.269204 19.6597 0.269204 19.4645 0.464466C19.2692 0.659728 19.2692 0.976311 19.4645 1.17157L22.2929 4L19.4645 6.82843C19.2692 7.02369 19.2692 7.34027 19.4645 7.53553C19.6597 7.7308 19.9763 7.7308 20.1716 7.53553L23.3536 4.35355ZM0 4.5H23V3.5H0V4.5Z" fill="currentColor"/>
+                </svg>
+              </span>
             </Link>
           </div>
         </motion.div>
