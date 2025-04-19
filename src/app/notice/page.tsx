@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 // 공지사항 더미 데이터
 const noticeData = [
@@ -61,33 +62,98 @@ const NoticePage = () => {
   return (
     <>
       {/* 페이지 헤더 */}
-      <div className="bg-primary text-white py-24 mt-16">
-        <div className="container-wrapper text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">공지사항</h1>
-          <p className="text-xl text-gray-200">
+      <div className="relative h-[350px] pt-20 flex items-center justify-center text-center overflow-hidden z-10">
+        {/* 배경 이미지 */}
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/asset/images/header-title-3.jpg" 
+            alt="유진파워시스템 공지사항" 
+            fill 
+            priority
+            className="object-cover" 
+          />
+        </div>
+        
+        {/* 컨텐츠 */}
+        <div className="container-wrapper relative z-10 px-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-black-900">공지사항</h1>
+          <p className="text-xl text-black-200 max-w-2xl mx-auto">
             유진파워시스템의 최신 소식과 공지사항을 확인하세요.
           </p>
         </div>
       </div>
 
       {/* 카테고리 필터 */}
-      <div className="bg-gray-100 border-b">
+      <div className="bg-white sticky top-0 z-30 shadow-sm">
         <div className="container-wrapper">
-          <nav className="flex overflow-x-auto py-2">
-            {(['전체', '공지사항', '보도자료', '채용'] as CategoryFilterType[]).map((category) => (
-              <button
-                key={category}
-                className={`px-6 py-2 font-medium whitespace-nowrap rounded-full mx-1 ${
-                  activeCategory === category
-                    ? 'bg-primary text-white'
-                    : 'text-gray-600 hover:bg-gray-200'
-                }`}
-                onClick={() => setActiveCategory(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </nav>
+          <div className="sub-nav flex items-center justify-between py-2">
+            <div className="inner-box flex items-center">
+              <Link href="/" className="btn-home flex items-center justify-center w-12 h-12 text-gray-500 hover:text-blue-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+              </Link>
+              
+              <div className="nav-divider h-8 w-px bg-gray-200 mx-3"></div>
+              
+              <div className="link-select relative group">
+                <button className="flex items-center px-5 py-4 text-gray-700 hover:text-blue-700 transition-colors">
+                  <span>공지사항</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 text-gray-400 group-hover:text-blue-700 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <ul className="list-select absolute top-full left-0 bg-white shadow-md w-48 hidden group-hover:block z-10 rounded-md overflow-hidden py-1">
+                  <li>
+                    <Link href="/company" className="block px-4 py-3 hover:bg-gray-50 text-gray-700">회사소개</Link>
+                  </li>
+                  <li>
+                    <Link href="/product" className="block px-4 py-3 hover:bg-gray-50 text-gray-700">제품소개</Link>
+                  </li>
+                  <li className="active">
+                    <Link href="/notice" className="block px-4 py-3 hover:bg-gray-50 text-blue-700">공지사항</Link>
+                  </li>
+                  <li>
+                    <Link href="/support" className="block px-4 py-3 hover:bg-gray-50 text-gray-700">고객지원</Link>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="nav-divider h-8 w-px bg-gray-200 mx-3"></div>
+              
+              <div className="link-select relative group">
+                <button className="flex items-center px-5 py-4 text-gray-700 hover:text-blue-700 transition-colors">
+                  <span>{activeCategory}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 text-gray-400 group-hover:text-blue-700 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <ul className="list-select absolute top-full left-0 bg-white shadow-md w-40 hidden group-hover:block z-10 rounded-md overflow-hidden py-1">
+                  <li className={activeCategory === '전체' ? 'active' : ''}>
+                    <button 
+                      onClick={() => setActiveCategory('전체')}
+                      className={`block w-full text-left px-4 py-3 hover:bg-gray-50 ${activeCategory === '전체' ? 'text-blue-700' : 'text-gray-700'}`}
+                    >
+                      전체
+                    </button>
+                  </li>
+                  {(['공지사항', '보도자료', '채용'] as CategoryFilterType[]).map((category) => (
+                    <li 
+                      key={category} 
+                      className={activeCategory === category ? 'active' : ''}
+                    >
+                      <button 
+                        onClick={() => setActiveCategory(category)}
+                        className={`block w-full text-left px-4 py-3 hover:bg-gray-50 ${activeCategory === category ? 'text-blue-700' : 'text-gray-700'}`}
+                      >
+                        {category}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -143,7 +209,7 @@ const NoticePage = () => {
               이전
             </button>
             <button
-              className="py-2 px-4 bg-primary text-white border border-primary"
+              className="py-2 px-4 bg-blue-700 text-white border border-blue-700"
               aria-current="page"
             >
               1

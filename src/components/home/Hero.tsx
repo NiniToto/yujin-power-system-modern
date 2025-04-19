@@ -10,31 +10,31 @@ import { FiPlay, FiPause } from 'react-icons/fi';
 const heroSlides = [
   {
     id: 1,
-    title: '고객만족1',
-    subtitle: '경쟁력이라는 신념1',
+    title: '고객만족',
+    subtitle: '경쟁력이라는 신념',
     description: '풍부한 경험과 최고의 기술력으로 수입에만 의존하는 유도가열장치 및\nCGL GA INDUCTION HEATER BODY 및 DOOR 부품을 국산화하여\n고객의 요구에 부응할 만큼 개선하기 위하여 노력하고 있습니다.',
     globalText: 'GLOBAL CHAMPION',
-    image: '/asset/images/hero1.jpg',
+    image: '/asset/images/hero-1.jpg',
     ctaText: 'MORE',
     ctaLink: '/company',
   },
   {
     id: 2,
-    title: '고객만족2',
-    subtitle: '경쟁력이라는 신념2',
-    description: '풍부한 경험과 최고의 기술력으로 수입에만 의존하는 유도가열장치 및\nCGL GA INDUCTION HEATER BODY 및 DOOR 부품을 국산화하여\n고객의 요구에 부응할 만큼 개선하기 위하여 노력하고 있습니다.',
-    globalText: 'GLOBAL CHAMPION',
-    image: '/asset/images/hero2.jpg',
+    title: '기술혁신',
+    subtitle: '현장 맞춤형 설계',
+    description: '현장의 다양한 요구를 반영한 맞춤형 설계와 정밀한 제작 기술로\nCGL 라인의 COIL INDUCTOR 및 전력제어 시스템을 국산화하였으며,\n기존 설비 대비 성능 향상과 유지보수 효율을 극대화했습니다.',
+    globalText: 'TECHNOLOGY INNOVATOR',
+    image: '/asset/images/hero-2.jpg',
     ctaText: 'MORE',
     ctaLink: '/product',
   },
   {
     id: 3,
-    title: '고객만족3',
-    subtitle: '경쟁력이라는 신념3',
-    description: '풍부한 경험과 최고의 기술력으로 수입에만 의존하는 유도가열장치 및\nCGL GA INDUCTION HEATER BODY 및 DOOR 부품을 국산화하여\n고객의 요구에 부응할 만큼 개선하기 위하여 노력하고 있습니다.',
-    globalText: 'GLOBAL CHAMPION',
-    image: '/asset/images/hero3.jpg',
+    title: '신뢰의 기업',
+    subtitle: '지속 가능한 가치창출',
+    description: '정직한 기술과 꾸준한 투자로\nCT-ARM, BILET-COIL 등 주요 부품의 국산화를 실현하고 있으며,\n미래 지향적 설비 개선과 글로벌 경쟁력 확보를 위해 끊임없이 나아가고 있습니다.',
+    globalText: 'VALUE CREATOR',
+    image: '/asset/images/hero-3.jpg',
     ctaText: 'MORE',
     ctaLink: '/company',
   },
@@ -70,7 +70,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative w-full h-[580px] md:h-[580px] mt-[70px] md:mt-[70px] pt-[90px] md:pt-[100px] overflow-hidden">
+    <section className="relative w-full h-[650px] md:h-[650px] mt-[100px] md:mt-[100px] pt-[90px] md:pt-[100px] overflow-hidden">
       {/* 배경 이미지와 오버레이 */}
       {heroSlides.map((slide, index) => (
         <div
@@ -80,7 +80,7 @@ const Hero = () => {
           }`}
         >
           {/* 배경 이미지 */}
-          <div className="absolute inset-0 bg-black/30 z-10"></div>
+          <div className="absolute inset-0 bg-black/20 z-10"></div>
           <Image
             src={slide.image}
             alt={slide.title}
@@ -110,7 +110,7 @@ const Hero = () => {
 
           {/* 데스크톱 버전 */}
           <div className="hidden md:block">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-2">
+            <h1 className="text-4xl lg:text-5xl font-bold mb-15">
               <strong>{heroSlides[currentSlide].title}</strong> {heroSlides[currentSlide].subtitle}
             </h1>
 

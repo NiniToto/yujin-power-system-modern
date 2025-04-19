@@ -13,7 +13,7 @@ const newsList = [
     summary: '당사는 지난 달 신제품 출시 행사를 성공적으로 개최하였습니다. 다양한 업계 관계자들이 참석한 가운데...',
     date: '2024-05-15',
     category: '보도자료',
-    image: '/news-1.jpg', // 임시 이미지 경로 (추후 실제 이미지로 교체)
+    image: '/asset/images/news1.png',
     link: '/notice/1',
   },
   {
@@ -22,7 +22,7 @@ const newsList = [
     summary: '당사는 2024년 2분기 매출 목표를 예상보다 15% 초과 달성하였습니다. 이는 전년 동기 대비 30% 증가한 수치로...',
     date: '2024-04-30',
     category: '공지사항',
-    image: '/news-2.jpg', // 임시 이미지 경로 (추후 실제 이미지로 교체)
+    image: '/asset/images/news2.png',
     link: '/notice/2',
   },
   {
@@ -31,7 +31,7 @@ const newsList = [
     summary: '유진파워시스템이 산업통상자원부 주최 기술 혁신상을 수상하였습니다. 이번 수상은 당사의 부품 국산화 노력과...',
     date: '2024-03-22',
     category: '보도자료',
-    image: '/news-3.jpg', // 임시 이미지 경로 (추후 실제 이미지로 교체)
+    image: '/asset/images/news3.png',
     link: '/notice/3',
   },
 ];
@@ -67,12 +67,17 @@ const NewsSection = () => {
   };
 
   return (
-    <section className="py-20 bg-white" ref={ref}>
+    <section className="pt-20 bg-white" ref={ref}>
+      {/* 상단 구분선 */}
+      <div className="container-wrapper">
+        <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
+        <div className="border-t border-gray-200 mb-8 pt-2"/>
+      </div>
       <div className="container-wrapper">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">
-              뉴스룸
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-2">
+              News
             </h2>
             <p className="text-gray-600 mb-4 md:mb-0">
               유진파워시스템의 최신 소식과 뉴스를 확인하세요
@@ -113,13 +118,13 @@ const NewsSection = () => {
               variants={itemVariants}
             >
               <div className="h-48 bg-gray-200 relative">
-                {/* 실제 이미지가 있을 경우 아래 주석을 해제하고 사용 */}
-                {/* <Image
+                {/* News Image */}
+                { <Image
                   src={news.image}
                   alt={news.title}
                   fill
                   className="object-cover"
-                /> */}
+                />}
                 
                 {/* 임시 색상 배경 */}
                 <div className="absolute inset-0 bg-primary opacity-20"></div>

@@ -15,7 +15,7 @@ const VisionSection = () => {
   }, [isInView, mainControls]);
 
   return (
-    <section className="py-16 bg-white">
+    <section className="pt-16 bg-white">
       <div className="container-wrapper" ref={ref}>
         <motion.div
           variants={{
@@ -36,7 +36,7 @@ const VisionSection = () => {
               &ldquo;부품을 국산화하여 고객의 요구에 부응할 만큼 개선하기 위하여 노력하고 있습니다&rdquo;
             </p>
             
-            <p className="text-lg text-gray-700 mb-8 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
               고객만족이 경쟁력 이라는 신념으로 산업발전에<br /> 
               선도적인 기업으로 성실하고 믿을 만한 파트너가 될 것을 약속드립니다.
             </p>

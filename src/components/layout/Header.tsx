@@ -22,7 +22,7 @@ const menuItems: MenuItem[] = [
     submenu: [
       { title: 'CEO 인사말', href: '/company#ceo' },
       { title: '회사연혁', href: '/company#history' },
-      { title: '비전/미션', href: '/company#vision' },
+      { title: 'Vision', href: '/company#vision' },
     ],
   },
   {
@@ -39,12 +39,19 @@ const menuItems: MenuItem[] = [
 ];
 
 const Header = () => {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [scrollDirection, setScrollDirection] = useState('none');
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const pathname = usePathname();
+  const [searchTerm, setSearchTerm] = useState('');
 
+  // 관리자 페이지인지 확인
+  const isAdminPage = pathname.startsWith('/admin');
+  
   // 항상 배경색이 필요한 페이지 목록
   const pagesWithBg = ['/notice', '/company', '/product'];
   const needsBackground = pagesWithBg.some(page => pathname.startsWith(page));
@@ -52,21 +59,60 @@ const Header = () => {
   // 홈페이지 여부 확인
   const isHomePage = pathname === '/';
 
+  // 추천 검색어 목록
+  const suggestedSearchTerms = [
+    '전력 시스템', '자동화 시스템', '부품 국산화', '기술 컨설팅', '제품 카탈로그'
+  ];
+
+  // 검색어 선택 및 검색 실행 함수
+  const handleSelectSearchTerm = (term: string) => {
+    setSearchTerm(term);
+    // 실제 검색 기능 구현 시 여기에 검색 로직 추가
+    console.log(`검색어 "${term}"로 검색을 실행합니다.`);
+    // 필요에 따라 페이지 이동이나 검색 결과 표시 로직 추가
+  };
+
   // 스크롤 이벤트 감지
   useEffect(() => {
+    // 관리자 페이지에서는 스크롤 이벤트를 처리하지 않음
+    if (isAdminPage) return;
+    
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
+      const currentScrollY = window.scrollY;
+      
+      // 스크롤 방향 감지
+      if (currentScrollY > lastScrollY) {
+        setScrollDirection('down');
+      } else if (currentScrollY < lastScrollY) {
+        setScrollDirection('up');
       }
+      
+      // 스크롤 위치에 따른 헤더 상태 설정
+      if (currentScrollY > 100) {
+        setIsScrolled(true);
+        
+        // 스크롤 내릴 때는 헤더 숨김
+        if (scrollDirection === 'down') {
+          setIsVisible(false);
+        } 
+        // 스크롤 올릴 때는 헤더 표시
+        else if (scrollDirection === 'up') {
+          setIsVisible(true);
+        }
+      } else {
+        // 최상단에 가까우면 항상 표시
+        setIsScrolled(false);
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [lastScrollY, scrollDirection, isAdminPage]);
 
   // 검색 토글 함수
   const toggleSearch = () => {
@@ -79,10 +125,8 @@ const Header = () => {
   
   // 배경색 결정
   const getBackgroundClass = () => {
-    if (isHomePage && !isScrolled) {
-      return 'bg-black bg-opacity-60';
-    } else if (hasBackground) {
-      return 'bg-white shadow-md';
+    if (isScrolled) {
+      return 'bg-white bg-opacity-80 shadow-md';
     } else {
       return 'bg-transparent';
     }
@@ -90,15 +134,30 @@ const Header = () => {
 
   // 텍스트 색상 결정
   const getTextColorClass = () => {
-    return hasBackground ? 'text-black' : 'text-white';
+    return isScrolled ? 'text-black' : 'text-black';
   };
+
+  // 헤더 표시/숨김 스타일
+  const getHeaderVisibilityStyle = () => {
+    if (!isVisible) {
+      return 'transform -translate-y-full';
+    }
+    return 'transform translate-y-0';
+  };
+
+  // 관리자 페이지에서는 헤더를 표시하지 않음 - 조기 반환 대신 조건부 렌더링 사용
+  if (isAdminPage) {
+    return null;
+  }
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full h-[70px] z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 w-full h-[100px] z-50 transition-all duration-300 ${
           getBackgroundClass()
-        } ${isScrolled || needsBackground ? 'py-2' : 'py-4'}`}
+        } ${isScrolled || needsBackground ? 'py-2' : 'py-4'} ${
+          getHeaderVisibilityStyle()
+        }`}
       >
         <div className="h-full flex items-center justify-between px-5 md:px-10">
           {/* 로고 - 좌측 배치 */}
@@ -128,7 +187,7 @@ const Header = () => {
                     className={`py-2 transition-colors ${
                       hasBackground
                         ? 'text-gray-800 hover:text-gray-600' 
-                        : 'text-white hover:text-gray-200'
+                        : 'text-gray-800 hover:text-gray-200'
                     }`}
                   >
                     {item.title}
@@ -296,8 +355,8 @@ const Header = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className={`fixed top-[70px] left-0 w-full z-40 ${
-              isHomePage && !isScrolled ? 'bg-black bg-opacity-80' : hasBackground ? 'bg-white' : 'bg-primary'
+            className={`fixed top-[100px] left-0 w-full z-40 ${
+              isHomePage && !isScrolled ? 'bg-white bg-opacity-80' : hasBackground ? 'bg-white' : 'bg-white'
             } shadow-md border-t ${isHomePage && !isScrolled ? 'border-gray-800' : 'border-gray-200'}`}
           >
             <div className="container mx-auto px-5 md:px-10 py-6">
@@ -307,16 +366,39 @@ const Header = () => {
                   placeholder="검색어를 입력하세요"
                   className="w-full p-4 pl-12 pr-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   autoFocus
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSelectSearchTerm(searchTerm);
+                    }
+                  }}
                 />
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                <div className="absolute left-4 top-[19px] text-gray-500 pointer-events-none">
                   <FiSearch size={20} />
                 </div>
                 <button
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-700 hover:text-gray-900"
+                  className="absolute right-4 top-[19px] text-gray-700 hover:text-gray-900"
                   onClick={toggleSearch}
                 >
                   <FiX size={20} />
                 </button>
+                
+                {/* 추천 검색어 */}
+                <div className="mt-4 bg-white rounded-lg p-3 shadow-sm border border-gray-100">
+                  <div className="flex items-center flex-wrap gap-2">
+                    <p className="text-sm text-gray-500 mr-2">추천 검색어:</p>
+                    {suggestedSearchTerms.map((term, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleSelectSearchTerm(term)}
+                        className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm transition-colors"
+                      >
+                        {term}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>

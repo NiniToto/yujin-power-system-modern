@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // 제품 데이터
 const productsData = [
@@ -25,11 +26,11 @@ const BusinessArea = () => {
   }, [isInView, controls]);
 
   return (
-    <section className="py-16 bg-white-100" ref={ref}>
+    <section className="pt-16 bg-white-100" ref={ref}>
       {/* 상단 구분선 */}
       <div className="container-wrapper">
         <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-        <div className="border-t border-gray-200 mb-10 pt-2"/>
+        <div className="border-t border-gray-200 mb-8 pt-2"/>
       </div>
       
       <div className="container-wrapper">
@@ -50,16 +51,29 @@ const BusinessArea = () => {
             {productsData.map((product) => (
               <div
                 key={product.id}
-                className="group relative overflow-hidden rounded shadow-md transition-all hover:shadow-lg"
+                className="group relative overflow-hidden rounded shadow-md transition-all hover:shadow-lg h-96"
               >
                 <Link href={product.path}>
-                  <div className="block relative h-72 bg-gray-100 p-6 transition-all group-hover:bg-blue-50">
-                    <div className="h-full flex flex-col justify-between">
-                      <h3 className="text-xl font-bold text-primary">{product.title}</h3>
+                  <div className="relative w-full h-full">
+                    {/* 제품 이미지 - 전체 영역 채우기 */}
+                    <Image
+                      src={product.image}
+                      alt={product.title}
+                      fill
+                      className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                    />
+                    
+                    {/* 그라디언트 오버레이 */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
+                    
+                    {/* 제품 정보 오버레이 */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">
+                      <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">{product.title}</h3>
                       
-                      <div className="flex items-center justify-between text-gray-600 group-hover:text-primary transition-colors">
-                        <p>자세히보기</p>
-                        <span className="text-xl font-bold">+</span>
+                      <div className="flex items-center justify-between mt-2">
+                        <p className="text-gray-200 group-hover:text-white transition-colors">자세히보기</p>
+                        <span className="text-xl font-bold text-white group-hover:text-primary transition-colors">+</span>
                       </div>
                     </div>
                   </div>
@@ -69,11 +83,6 @@ const BusinessArea = () => {
           </div>
         </motion.div>
       </div>      
-      {/* 하단 구분선 */}
-      <div className="container-wrapper">
-        <div className="border-b border-gray-200 mt-12 pb-2"/>
-        <div className="w-20 h-1 bg-primary mx-auto rounded-full" />        
-      </div>
     </section>
   );
 };
