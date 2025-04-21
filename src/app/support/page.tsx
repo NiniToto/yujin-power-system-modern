@@ -73,7 +73,7 @@ const SupportPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
-  const [activeTab, setActiveTab] = useState<'inquiry' | 'faq' | 'resources'>('inquiry');
+  const [activeTab, setActiveTab] = useState<'inquiry' | 'faq' | 'resources'>('faq');
   
   // 사이드바 메뉴 아이템 정의
   const sidebarMenuItems = [
@@ -93,9 +93,6 @@ const SupportPage = () => {
       </svg>
     )}
   ];
-  
-  // 활성 카테고리 상태 관리
-  const [activeTab, setActiveTab] = useState('faq');
   
   // 폼 입력 처리
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

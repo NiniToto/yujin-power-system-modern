@@ -105,98 +105,163 @@ const NoticePage = () => {
           </p>
         </div>
       </div>
-      {/* 검색창 */}
-
-      <div className="container-wrapper py-16">
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div className="flex justify-center px-6 py-5 border-b border-gray-200">
-            <div className="flex items-center gap-2 w-full max-w-[700px]">
-              <select className="h-12 border border-gray-300 rounded-md px-3 text-sm">
-                <option value="title">제목</option>
-                <option value="content">내용</option>
-                <option value="title_content">제목+내용</option>
-              </select>
-              <input
-                type="text"
-                placeholder="검색어 입력"
-                className="h-12 flex-1 border border-gray-300 rounded-md px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                type="button"
-                className="h-12 bg-blue-700 text-white px-5 rounded-md hover:bg-blue-800 text-sm"
-              >
-                검색
-              </button>
+      {/* 탭 네비게이션 */}
+      <div className="bg-white sticky top-0 z-30 shadow-sm">
+        <div style={containerStyle} className="px-0">
+          <div className="sub-nav flex items-center justify-between py-2">
+            <div className="inner-box flex items-center">
+              <Link href="/" className="btn-home flex items-center justify-center w-12 h-12 text-gray-500 hover:text-blue-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+              </Link>
+              
+              <div className="nav-divider h-8 w-px bg-gray-200 mx-3"></div>
+              
+              <div className="relative">
+                <div className="flex items-center px-5 py-4 text-black-700 font-medium">
+                  <span>공지사항</span>
+                </div>
+              </div>
+              
+              <div className="nav-divider h-8 w-px bg-gray-200 mx-3"></div>
+              
+              <div className="relative">
+                <div className="flex items-center px-5 py-4 text-blue-700 font-medium">
+                  <span>{activeCategory}</span>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* 공지사항 목록 */}
-          <div className="divide-y">
-            {filteredNotices.length > 0 ? (
-              filteredNotices.map((notice, index) => (
-                <motion.div
-                  key={notice.id}
-                  className="p-6 hover:bg-gray-50 transition-colors"
-                  whileHover={{ x: 5 }}
-                >
-                  <Link href={`/notice/${notice.id}`} className="block">
-                    <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
-                      <div className="flex items-center gap-3">
-                        {/* 최신글이 마지막 번호  */}
-                        <span className="text-gray-400">No. {filteredNotices.length - index}</span>
-                        {notice.category && (
-                          <span className={`text-xs px-2 py-1 rounded-full font-medium ${notice.category === '공지' ? 'bg-red-100 text-red-700' :
-                            notice.category === '보도자료' ? 'bg-green-100 text-green-700' :
-                              'bg-purple-100 text-purple-700'
-                            }`}>
-                            {notice.category}
-                          </span>
-                        )}
-                        <span>{notice.date}</span>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span>조회수: {notice.views}</span>
-                      </div>
-                    </div>
-                    <h2 className="text-xl font-bold text-gray-800 mb-2">{notice.title}</h2>
-                    <p className="text-gray-600">{notice.summary}</p>
-                  </Link>
-                </motion.div>
-              ))
-            ) : (
-              <div className="p-12 text-center text-gray-500">해당 카테고리의 공지사항이 없습니다.</div>
-            )}
+      {/* 컨텐츠 영역 - 사이드바 메뉴와 컨텐츠 분리 */}
+      <div style={containerStyle} className="py-8 grid grid-cols-1 md:grid-cols-6 gap-8">
+        {/* 좌측 사이드바 메뉴 */}
+        <div className="md:col-span-1">
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="py-5 px-4 border-b border-gray-100">
+              <h2 className="text-lg font-bold text-gray-800">공지사항</h2>
+            </div>
+            <ul>
+              {sidebarMenuItems.map((item) => (
+                <li key={item.id} className="border-b border-gray-50 last:border-b-0">
+                  <button
+                    onClick={() => setActiveCategory(item.id as CategoryFilterType)}
+                    className={`w-full flex items-center px-4 py-3.5 text-left transition-colors ${
+                      activeCategory === item.id 
+                        ? 'bg-blue-50 text-blue-700 font-medium border-l-4 border-blue-700' 
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent'
+                    }`}
+                  >
+                    <span className="mr-3 opacity-70">{item.icon}</span>
+                    <span>{item.title}</span>
+                    {activeCategory === item.id && (
+                      <span className="ml-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* 페이지네이션 (샘플) */}
-        <div className="flex justify-center mt-8">
-          <nav className="inline-flex rounded-md shadow">
-            <button
-              className="py-2 px-4 bg-white border border-gray-300 rounded-l-md text-gray-500 hover:bg-gray-50"
-              aria-label="이전 페이지"
-              disabled
-            >
-              이전
-            </button>
-            <button
-              className="py-2 px-4 bg-blue-700 text-white border border-blue-700"
-              aria-current="page"
-            >
-              1
-            </button>
-            <button
-              className="py-2 px-4 bg-white border border-gray-300 text-gray-500 hover:bg-gray-50"
-            >
-              2
-            </button>
-            <button
-              className="py-2 px-4 bg-white border border-gray-300 rounded-r-md text-gray-500 hover:bg-gray-50"
-              aria-label="다음 페이지"
-            >
-              다음
-            </button>
-          </nav>
+        {/* 우측 컨텐츠 영역 */}
+        <div className="md:col-span-5">
+          {/* 공지사항 목록 */}
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="flex justify-center px-6 py-5 border-b border-gray-200">
+              <div className="flex items-center gap-2 w-full max-w-[700px]">
+                <select className="h-12 border border-gray-300 rounded-md px-3 text-sm">
+                  <option value="title">제목</option>
+                  <option value="content">내용</option>
+                  <option value="title_content">제목+내용</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="검색어 입력"
+                  className="h-12 flex-1 border border-gray-300 rounded-md px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="button"
+                  className="h-12 bg-blue-700 text-white px-5 rounded-md hover:bg-blue-800 text-sm"
+                >
+                  검색
+                </button>
+              </div>
+            </div>
+            <div className="divide-y">
+              {filteredNotices.length > 0 ? (
+                filteredNotices.map((notice) => (
+                  <motion.div 
+                    key={notice.id}
+                    className="p-6 hover:bg-gray-50 transition-colors"
+                    whileHover={{ x: 5 }}
+                  >
+                    <Link href={`/notice/${notice.id}`} className="block">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                          notice.category === '공지사항' ? 'bg-blue-100 text-blue-700' :
+                          notice.category === '보도자료' ? 'bg-green-100 text-green-700' :
+                          'bg-purple-100 text-purple-700'
+                        }`}>
+                          {notice.category}
+                        </span>
+                        <span className="text-gray-500 text-sm">{notice.date}</span>
+                      </div>
+                      
+                      <h2 className="text-xl font-bold text-gray-800 mb-2">
+                        {notice.title}
+                      </h2>
+                      
+                      <p className="text-gray-600">
+                        {notice.summary}
+                      </p>
+                    </Link>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="p-12 text-center text-gray-500">
+                  해당 카테고리의 공지사항이 없습니다.
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* 페이지네이션 (샘플) */}
+          <div className="flex justify-center mt-8">
+            <nav className="inline-flex rounded-md shadow">
+              <button
+                className="py-2 px-4 bg-white border border-gray-300 rounded-l-md text-gray-500 hover:bg-gray-50"
+                aria-label="이전 페이지"
+                disabled
+              >
+                이전
+              </button>
+              <button
+                className="py-2 px-4 bg-blue-700 text-white border border-blue-700"
+                aria-current="page"
+              >
+                1
+              </button>
+              <button
+                className="py-2 px-4 bg-white border border-gray-300 text-gray-500 hover:bg-gray-50"
+              >
+                2
+              </button>
+              <button
+                className="py-2 px-4 bg-white border border-gray-300 rounded-r-md text-gray-500 hover:bg-gray-50"
+                aria-label="다음 페이지"
+              >
+                다음
+              </button>
+            </nav>
+          </div>
         </div>
       </div>
     </>
