@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-// 공지사항 더미 데이터
+// 공지사항 목록
 const noticeData = [
   {
     id: 1,
@@ -13,7 +13,8 @@ const noticeData = [
     summary: '당사는 지난 달 신제품 출시 행사를 성공적으로 개최하였습니다. 다양한 업계 관계자들이 참석한 가운데...',
     content: '당사는 지난 달 신제품 출시 행사를 성공적으로 개최하였습니다. 다양한 업계 관계자들이 참석한 가운데, 당사의 신제품 라인업이 소개되었으며 참가자들의 높은 관심과 호평을 받았습니다. 이번 행사에서는 전력 시스템과 자동화 시스템 분야의 혁신적인 신제품들이 공개되었으며, 특히 국산화에 성공한 핵심 부품들에 대한 설명이 진행되었습니다.',
     date: '2024-05-15',
-    category: '보도자료',
+    category: '공지',
+    views: 132,
   },
   {
     id: 2,
@@ -21,7 +22,8 @@ const noticeData = [
     summary: '당사는 2024년 2분기 매출 목표를 예상보다 15% 초과 달성하였습니다. 이는 전년 동기 대비 30% 증가한 수치로...',
     content: '당사는 2024년 2분기 매출 목표를 예상보다 15% 초과 달성하였습니다. 이는 전년 동기 대비 30% 증가한 수치로, 신제품 출시와 기존 고객사들의 지속적인 지원, 그리고 해외 시장 진출 확대에 따른 결과입니다. 특히 자동화 시스템 분야의 매출이 크게 증가하였으며, 국내외 산업 현장에서의 자동화 수요 증가에 힘입어 관련 제품 라인업의 판매가 호조를 보였습니다.',
     date: '2024-04-30',
-    category: '공지사항',
+    category: '공지',
+    views: 98,
   },
   {
     id: 3,
@@ -29,7 +31,8 @@ const noticeData = [
     summary: '유진파워시스템이 산업통상자원부 주최 기술 혁신상을 수상하였습니다. 이번 수상은 당사의 부품 국산화 노력과...',
     content: '유진파워시스템이 산업통상자원부 주최 기술 혁신상을 수상하였습니다. 이번 수상은 당사의 부품 국산화 노력과 그에 따른 국내 산업 발전 기여도를 인정받은 결과입니다. 당사는 지난 수년간 수입에 의존하던 주요 부품들의 국산화를 위해 연구개발에 투자해왔으며, 그 결과 여러 핵심 부품들의 국산화에 성공하였습니다. 이를 통해 국내 산업계의 해외 의존도를 낮추고 기술 경쟁력 강화에 기여한 점을 높이 평가받았습니다.',
     date: '2024-03-22',
-    category: '보도자료',
+    category: '',
+    views: 132,
   },
   {
     id: 4,
@@ -37,7 +40,8 @@ const noticeData = [
     summary: '유진파워시스템에서 함께 할 고객 서비스 담당자를 모집합니다. 제품에 대한 기술 지원 및 고객 응대 업무를 담당할...',
     content: '유진파워시스템에서 함께 할 고객 서비스 담당자를 모집합니다. 제품에 대한 기술 지원 및 고객 응대 업무를 담당할 인재를 찾고 있습니다. 기계, 전기, 전자 관련 전공자로서 고객 서비스에 관심이 있는 분들의 많은 지원 바랍니다. 자세한 채용 정보는 당사 채용 페이지를 참고해 주시기 바랍니다.',
     date: '2024-02-15',
-    category: '채용',
+    category: '',
+    views: 52,
   },
   {
     id: 5,
@@ -45,7 +49,8 @@ const noticeData = [
     summary: '고객님께 더 나은 서비스를 제공하기 위한 시스템 정기 점검이 예정되어 있습니다. 점검 시간 동안 일부 서비스 이용이...',
     content: '고객님께 더 나은 서비스를 제공하기 위한 시스템 정기 점검이 예정되어 있습니다. 점검 시간 동안 일부 서비스 이용이 제한될 수 있으니 양해 부탁드립니다. 점검 일시: 2024년 1월 20일 토요일 오후 11시 ~ 2024년 1월 21일 일요일 오전 2시 (3시간). 점검 대상: 온라인 고객 지원 시스템, 기술 문서 다운로드 서비스. 문의사항은 고객센터로 연락 주시기 바랍니다.',
     date: '2024-01-18',
-    category: '공지사항',
+    category: '',
+    views: 78,
   }
 ];
 
@@ -53,11 +58,13 @@ type CategoryFilterType = '전체' | '공지사항' | '보도자료' | '채용';
 
 const NoticePage = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilterType>('전체');
-  
+
+
+  const sortedNotices = [...noticeData].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   // 카테고리별 필터링
-  const filteredNotices = activeCategory === '전체' 
-    ? noticeData 
-    : noticeData.filter(notice => notice.category === activeCategory);
+  const filteredNotices = activeCategory === '전체'
+    ? sortedNotices
+    : sortedNotices.filter(notice => notice.category === activeCategory);
 
   return (
     <>
@@ -65,15 +72,15 @@ const NoticePage = () => {
       <div className="relative h-[350px] pt-20 flex items-center justify-center text-center overflow-hidden z-10">
         {/* 배경 이미지 */}
         <div className="absolute inset-0 z-0">
-          <Image 
-            src="/asset/images/header-title-3.jpg" 
-            alt="유진파워시스템 공지사항" 
-            fill 
+          <Image
+            src="/asset/images/header-title-3.jpg"
+            alt="유진파워시스템 공지사항"
+            fill
             priority
-            className="object-cover" 
+            className="object-cover"
           />
         </div>
-        
+
         {/* 컨텐츠 */}
         <div className="container-wrapper relative z-10 px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-black-900">공지사항</h1>
@@ -83,121 +90,70 @@ const NoticePage = () => {
         </div>
       </div>
 
-      {/* 카테고리 필터 */}
-      <div className="bg-white sticky top-0 z-30 shadow-sm">
-        <div className="container-wrapper">
-          <div className="sub-nav flex items-center justify-between py-2">
-            <div className="inner-box flex items-center">
-              <Link href="/" className="btn-home flex items-center justify-center w-12 h-12 text-gray-500 hover:text-blue-700 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-              </Link>
-              
-              <div className="nav-divider h-8 w-px bg-gray-200 mx-3"></div>
-              
-              <div className="link-select relative group">
-                <button className="flex items-center px-5 py-4 text-gray-700 hover:text-blue-700 transition-colors">
-                  <span>공지사항</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 text-gray-400 group-hover:text-blue-700 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <ul className="list-select absolute top-full left-0 bg-white shadow-md w-48 hidden group-hover:block z-10 rounded-md overflow-hidden py-1">
-                  <li>
-                    <Link href="/company" className="block px-4 py-3 hover:bg-gray-50 text-gray-700">회사소개</Link>
-                  </li>
-                  <li>
-                    <Link href="/product" className="block px-4 py-3 hover:bg-gray-50 text-gray-700">제품소개</Link>
-                  </li>
-                  <li className="active">
-                    <Link href="/notice" className="block px-4 py-3 hover:bg-gray-50 text-blue-700">공지사항</Link>
-                  </li>
-                  <li>
-                    <Link href="/support" className="block px-4 py-3 hover:bg-gray-50 text-gray-700">고객지원</Link>
-                  </li>
-                </ul>
-              </div>
-              
-              <div className="nav-divider h-8 w-px bg-gray-200 mx-3"></div>
-              
-              <div className="link-select relative group">
-                <button className="flex items-center px-5 py-4 text-gray-700 hover:text-blue-700 transition-colors">
-                  <span>{activeCategory}</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 text-gray-400 group-hover:text-blue-700 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <ul className="list-select absolute top-full left-0 bg-white shadow-md w-40 hidden group-hover:block z-10 rounded-md overflow-hidden py-1">
-                  <li className={activeCategory === '전체' ? 'active' : ''}>
-                    <button 
-                      onClick={() => setActiveCategory('전체')}
-                      className={`block w-full text-left px-4 py-3 hover:bg-gray-50 ${activeCategory === '전체' ? 'text-blue-700' : 'text-gray-700'}`}
-                    >
-                      전체
-                    </button>
-                  </li>
-                  {(['공지사항', '보도자료', '채용'] as CategoryFilterType[]).map((category) => (
-                    <li 
-                      key={category} 
-                      className={activeCategory === category ? 'active' : ''}
-                    >
-                      <button 
-                        onClick={() => setActiveCategory(category)}
-                        className={`block w-full text-left px-4 py-3 hover:bg-gray-50 ${activeCategory === category ? 'text-blue-700' : 'text-gray-700'}`}
-                      >
-                        {category}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* 검색창 */}
 
-      {/* 공지사항 목록 */}
       <div className="container-wrapper py-16">
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="flex justify-center px-6 py-5 border-b border-gray-200">
+            <div className="flex items-center gap-2 w-full max-w-[700px]">
+              <select className="h-12 border border-gray-300 rounded-md px-3 text-sm">
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+                <option value="title_content">제목+내용</option>
+              </select>
+              <input
+                type="text"
+                placeholder="검색어 입력"
+                className="h-12 flex-1 border border-gray-300 rounded-md px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                className="h-12 bg-blue-700 text-white px-5 rounded-md hover:bg-blue-800 text-sm"
+              >
+                검색
+              </button>
+            </div>
+          </div>
+
+          {/* 공지사항 목록 */}
           <div className="divide-y">
             {filteredNotices.length > 0 ? (
-              filteredNotices.map((notice) => (
-                <motion.div 
+              filteredNotices.map((notice, index) => (
+                <motion.div
                   key={notice.id}
                   className="p-6 hover:bg-gray-50 transition-colors"
                   whileHover={{ x: 5 }}
                 >
                   <Link href={`/notice/${notice.id}`} className="block">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                        notice.category === '공지사항' ? 'bg-blue-100 text-blue-700' :
-                        notice.category === '보도자료' ? 'bg-green-100 text-green-700' :
-                        'bg-purple-100 text-purple-700'
-                      }`}>
-                        {notice.category}
-                      </span>
-                      <span className="text-gray-500 text-sm">{notice.date}</span>
+                    <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
+                      <div className="flex items-center gap-3">
+                        {/* 최신글이 마지막 번호  */}
+                        <span className="text-gray-400">No. {filteredNotices.length - index}</span>
+                        {notice.category && (
+                          <span className={`text-xs px-2 py-1 rounded-full font-medium ${notice.category === '공지' ? 'bg-red-100 text-red-700' :
+                            notice.category === '보도자료' ? 'bg-green-100 text-green-700' :
+                              'bg-purple-100 text-purple-700'
+                            }`}>
+                            {notice.category}
+                          </span>
+                        )}
+                        <span>{notice.date}</span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span>조회수: {notice.views}</span>
+                      </div>
                     </div>
-                    
-                    <h2 className="text-xl font-bold text-gray-800 mb-2">
-                      {notice.title}
-                    </h2>
-                    
-                    <p className="text-gray-600">
-                      {notice.summary}
-                    </p>
+                    <h2 className="text-xl font-bold text-gray-800 mb-2">{notice.title}</h2>
+                    <p className="text-gray-600">{notice.summary}</p>
                   </Link>
                 </motion.div>
               ))
             ) : (
-              <div className="p-12 text-center text-gray-500">
-                해당 카테고리의 공지사항이 없습니다.
-              </div>
+              <div className="p-12 text-center text-gray-500">해당 카테고리의 공지사항이 없습니다.</div>
             )}
           </div>
         </div>
-        
+
         {/* 페이지네이션 (샘플) */}
         <div className="flex justify-center mt-8">
           <nav className="inline-flex rounded-md shadow">
@@ -232,4 +188,4 @@ const NoticePage = () => {
   );
 };
 
-export default NoticePage; 
+export default NoticePage;

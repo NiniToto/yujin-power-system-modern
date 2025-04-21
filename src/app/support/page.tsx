@@ -21,7 +21,7 @@ const SupportPage = () => {
   const [submitError, setSubmitError] = useState('');
   
   // 활성 카테고리 상태 관리
-  const [activeTab, setActiveTab] = useState('inquiry');
+  const [activeTab, setActiveTab] = useState('faq');
   
   // 폼 입력 처리
   const handleChange = (
