@@ -56,6 +56,13 @@ const noticeData = [
 
 type CategoryFilterType = '전체' | '공지사항' | '보도자료' | '채용';
 
+// 스타일 정의
+const containerStyle = {
+  width: '95%',
+  maxWidth: '1800px',
+  margin: '0 auto',
+};
+
 const NoticePage = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilterType>('전체');
 
@@ -65,6 +72,15 @@ const NoticePage = () => {
   const filteredNotices = activeCategory === '전체'
     ? sortedNotices
     : sortedNotices.filter(notice => notice.category === activeCategory);
+
+  // 사이드바 메뉴 아이템 정의
+  const sidebarMenuItems = [
+    { id: '전체', title: '전체', icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+    )},
+  ];
 
   return (
     <>
@@ -82,14 +98,13 @@ const NoticePage = () => {
         </div>
 
         {/* 컨텐츠 */}
-        <div className="container-wrapper relative z-10 px-4">
+        <div style={containerStyle} className="relative z-10 px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-black-900">공지사항</h1>
           <p className="text-xl text-black-200 max-w-2xl mx-auto">
             유진파워시스템의 최신 소식과 공지사항을 확인하세요.
           </p>
         </div>
       </div>
-
       {/* 검색창 */}
 
       <div className="container-wrapper py-16">
