@@ -165,7 +165,7 @@ const Header = () => {
             <Link href="/" className="flex items-center">
               <div className="relative">
                 {/* 로고 이미지는 public 폴더에 추가 필요 */}
-                <div className={`font-bold text-xl ${getTextColorClass()}`}>
+                <div className={`font-bold text-4xl ${getTextColorClass()}`}>
                   유진파워시스템
                 </div>
               </div>
