@@ -10,19 +10,26 @@ import {
   FiHeadphones, 
   FiBell,
   FiChevronLeft,
-  FiChevronRight
+  FiChevronRight,
+  FiGrid
 } from 'react-icons/fi';
 
 const QuickMenu = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { language } = useLanguage();
 
   // 메뉴 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node) && isExpanded) {
-        setIsExpanded(false);
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        if (isMenuOpen) {
+          setIsMenuOpen(false);
+        }
+        if (isExpanded) {
+          setIsExpanded(false);
+        }
       }
     };
 
@@ -30,7 +37,7 @@ const QuickMenu = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isExpanded]);
+  }, [isExpanded, isMenuOpen]);
 
   const content = {
     ko: {
@@ -55,8 +62,21 @@ const QuickMenu = () => {
 
   const currentText = content[language as keyof typeof content];
 
-  const toggleMenu = () => setIsExpanded(!isExpanded);
+  const toggleMenu = () => {
+    if (!isMenuOpen) {
+      setIsMenuOpen(true);
+      setIsExpanded(true);
+    } else {
+      setIsExpanded(!isExpanded);
+    }
+  };
 
+  // 메뉴를 완전히 닫는 함수
+  const closeMenu = () => {
+    setIsExpanded(false);
+    setIsMenuOpen(false);
+  };
+  
   // 카드 위치 계산 (12시부터 6시까지 반시계 방향)
   const getCardPosition = (index: number) => {
     if (!isExpanded) return "";
@@ -116,7 +136,9 @@ const QuickMenu = () => {
       <motion.button
         type="button"
         onClick={toggleMenu}
-        className="h-14 pl-4 pr-2 py-2 flex items-center justify-center z-20 relative overflow-hidden"
+        className={`flex items-center justify-center z-20 relative overflow-hidden ${
+          isMenuOpen ? 'h-14 pl-4 pr-2 py-2' : 'h-12 w-8 pr-0'
+        }`}
         animate={pulseAnimation}
         whileHover={hoverAnimation}
         whileTap={tapAnimation}
@@ -192,16 +214,28 @@ const QuickMenu = () => {
         />
         
         <div className="flex items-center text-white relative z-10">
-          <span className="text-xs font-medium mr-2 drop-shadow-sm">
-            {currentText.toggle}
-          </span>
-          <motion.div
-            animate={{ rotate: isExpanded ? 180 : 0 }}
-            transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
-            className="text-lg text-white"
-          >
-            {isExpanded ? <FiChevronRight /> : <FiChevronLeft />}
-          </motion.div>
+          {isMenuOpen ? (
+            <>
+              <span className="text-xs font-medium mr-2 drop-shadow-sm">
+                {currentText.toggle}
+              </span>
+              <motion.div
+                animate={{ rotate: isExpanded ? 180 : 0 }}
+                transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
+                className="text-lg text-white"
+              >
+                {isExpanded ? <FiChevronRight /> : <FiChevronLeft />}
+              </motion.div>
+            </>
+          ) : (
+            <motion.div
+              className="text-lg text-white flex items-center justify-center"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+            >
+              <FiGrid size={16} />
+            </motion.div>
+          )}
         </div>
       </motion.button>
 
@@ -224,7 +258,7 @@ const QuickMenu = () => {
             <Link
               href={link.href}
               className="h-full w-full flex flex-col items-center justify-center text-white p-1"
-              onClick={() => setIsExpanded(false)}
+              onClick={closeMenu}
             >
               <div className="text-lg mb-0.5 drop-shadow-md">{link.icon}</div>
               <span className="text-[10px] font-medium text-center leading-tight drop-shadow-md">

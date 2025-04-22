@@ -1,6 +1,6 @@
 import Hero from '@/components/home/Hero';
 import VisionSection from '@/components/home/VisionSection';
-import NewsSection from '@/components/home/NewsSection';
+import NoticeSection from '@/components/home/NoticeSection';
 import BusinessArea from '@/components/home/BusinessArea';
 import ContactSection from '@/components/home/ContactSection';
 
@@ -10,7 +10,7 @@ export default function Home() {
       <Hero />
       <VisionSection />
       <BusinessArea />
-      <NewsSection />
+      <NoticeSection />
       <ContactSection />
     </>
   );

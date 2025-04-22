@@ -18,11 +18,11 @@ const ContactSection = () => {
 
   return (
     <section className="py-10 bg-white-100">
-      <div className="container-wrapper">
+      <div className="container-fluid mx-auto px-4 md:px-8 lg:px-16 xl:px-20 max-w-[1780px]">
         <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
         <div className="border-t border-gray-200 mb-8 pt-2"/>
       </div>
-      <div className="container-wrapper" ref={ref}>
+      <div className="container-fluid mx-auto px-4 md:px-8 lg:px-16 xl:px-20 max-w-[1780px]" ref={ref}>
         <motion.div
           variants={{
             hidden: { opacity: 0, y: 50 },
@@ -106,15 +106,14 @@ const ContactSection = () => {
                 </div>
                 
                 {/* 상담사 아이콘 */}
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 text-primary/40">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <title>고객상담 아이콘</title>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.75 8.75L9.75 6.75C9.75 4.26472 11.7647 2.25 14.25 2.25L14.25 2.25C16.7353 2.25 18.75 4.26472 18.75 6.75L18.75 8.75" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M5.25 8.75L5.25 15.25C5.25 17.7353 7.26472 19.75 9.75 19.75L14.25 19.75C16.7353 19.75 18.75 17.7353 18.75 15.25L18.75 8.75" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.5 21.5L14.5 21.5" />
-                    <circle cx="18.5" cy="12" r="2.25" stroke="currentColor" strokeWidth={1} />
-                    <circle cx="5.5" cy="12" r="2.25" stroke="currentColor" strokeWidth={1} />
-                  </svg>
+                <div className="absolute right-6 top-1/2 -translate-y-3/5">
+                  <Image 
+                    src="/asset/images/telephone.png"
+                    alt="고객상담 아이콘"
+                    width={120}
+                    height={120}
+                    className="opacity-40"
+                  />
                 </div>
                 
                 <div className="space-y-3 mt-2 pr-16">
@@ -123,6 +122,7 @@ const ContactSection = () => {
                     <p className="text-gray-500 text-xs">대표전화</p>
                     <a href="tel:051-000-0000" className="text-primary font-semibold text-lg group-hover:text-primary-dark transition-colors flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <title>전화 아이콘</title>
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>
                       051-000-0000
@@ -134,6 +134,7 @@ const ContactSection = () => {
                     <p className="text-gray-500 text-xs">고객지원</p>
                     <a href="tel:051-000-0001" className="text-primary font-semibold text-lg group-hover:text-primary-dark transition-colors flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <title>전화 아이콘</title>
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>
                       051-000-0001
@@ -145,6 +146,7 @@ const ContactSection = () => {
                     <p className="text-gray-400 text-xs">팩스번호</p>
                     <div className="text-gray-500 text-xs flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <title>팩스 아이콘</title>
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                       051-000-0002

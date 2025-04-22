@@ -70,7 +70,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative w-full h-[650px] md:h-[650px] mt-[100px] md:mt-[100px] pt-[90px] md:pt-[100px] overflow-hidden">
+    <section className="relative w-full h-[850px] md:h-[850px] mt-[100px] md:mt-[100px] pt-[90px] md:pt-[100px] overflow-hidden">
       {/* 배경 이미지와 오버레이 */}
       {heroSlides.map((slide, index) => (
         <div
@@ -80,7 +80,7 @@ const Hero = () => {
           }`}
         >
           {/* 배경 이미지 */}
-          <div className="absolute inset-0 bg-black/20 z-10"></div>
+          <div className="absolute inset-0 bg-black/20 z-10" />
           <Image
             src={slide.image}
             alt={slide.title}
@@ -88,43 +88,43 @@ const Hero = () => {
             priority={index === 0}
             className="object-cover object-center"
             sizes="100vw"
-            quality={85}
+            quality={90}
           />
         </div>
       ))}
 
       {/* 콘텐츠 */}
-      <div className="container-wrapper relative z-20 flex flex-col justify-center h-full">
+      <div className="container-wrapper relative z-20 flex flex-col justify-start h-full pt-20 pl-10">
         <motion.div
           key={currentSlide}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-white"
+          className="text-white max-w-4xl"
         >
           {/* 모바일 버전 */}
           <div className="block md:hidden">
-            <p className="text-xl font-bold mb-1">{heroSlides[currentSlide].title}</p>
-            <p className="text-lg mb-4">{heroSlides[currentSlide].subtitle}</p>
+            <p className="text-2xl font-bold mb-1">{heroSlides[currentSlide].title}</p>
+            <p className="text-xl mb-4">{heroSlides[currentSlide].subtitle}</p>
           </div>
 
           {/* 데스크톱 버전 */}
           <div className="hidden md:block">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-15">
+            <h1 className="text-5xl lg:text-6xl font-bold mb-15">
               <strong>{heroSlides[currentSlide].title}</strong> {heroSlides[currentSlide].subtitle}
             </h1>
 
-            <p className="text-2xl font-bold tracking-widest mb-6">
+            <p className="text-3xl font-bold tracking-widest mb-6">
               {heroSlides[currentSlide].globalText}
             </p>
             
-            <p className="text-lg my-6 whitespace-pre-line text-gray-100">
+            <p className="text-xl my-6 whitespace-pre-line text-gray-100">
               {heroSlides[currentSlide].description}
             </p>
                         
             <Link
               href={heroSlides[currentSlide].ctaLink}
-              className="inline-flex items-center text-white font-medium hover:opacity-90 transition-opacity group"
+              className="inline-flex items-center text-white text-lg font-medium hover:opacity-90 transition-opacity group"
             >
               <span className="mr-2">{heroSlides[currentSlide].ctaText}</span>
               <span className="group-hover:translate-x-1 transition-transform duration-300 inline-block">
@@ -142,7 +142,8 @@ const Hero = () => {
           <div className="flex space-x-2 left-0">
             {heroSlides.map((_, index) => (
               <button
-                key={index}
+                type="button"
+                key={`slide-indicator-${heroSlides[index].id}`}
                 onClick={() => goToSlide(index)}
                 className={`w-3 h-3 rounded-full transition-colors ${
                   index === currentSlide ? 'bg-white' : 'bg-white/40'
@@ -154,6 +155,7 @@ const Hero = () => {
           
           {/* 재생/일시정지 버튼 */}
           <button
+            type="button"
             onClick={togglePlayPause}
             className="ml-4 w-8 h-8 rounded-full bg-white/0 flex items-center justify-center text-white backdrop-blur-sm hover:bg-white/30 transition-colors"
             aria-label={isPlaying ? '슬라이드 일시정지' : '슬라이드 재생'}

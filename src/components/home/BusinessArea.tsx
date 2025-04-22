@@ -28,12 +28,12 @@ const BusinessArea = () => {
   return (
     <section className="pt-16 bg-white-100" ref={ref}>
       {/* 상단 구분선 */}
-      <div className="container-wrapper">
+      <div className="container-fluid mx-auto px-4 md:px-8 lg:px-16 xl:px-20 max-w-[1780px]">
         <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
         <div className="border-t border-gray-200 mb-8 pt-2"/>
       </div>
       
-      <div className="container-wrapper">
+      <div className="container-fluid mx-auto px-4 md:px-8 lg:px-16 xl:px-20 max-w-[1780px]">
         <motion.div
           variants={{
             hidden: { opacity: 0 },
@@ -65,7 +65,7 @@ const BusinessArea = () => {
                     />
                     
                     {/* 그라디언트 오버레이 */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
                     
                     {/* 제품 정보 오버레이 */}
                     <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-10">

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FiGlobe, FiUser, FiSearch, FiX } from 'react-icons/fi';
 
@@ -23,19 +22,30 @@ const menuItems: MenuItem[] = [
       { title: 'CEO 인사말', href: '/company#ceo' },
       { title: '회사연혁', href: '/company#history' },
       { title: 'Vision', href: '/company#vision' },
+      { title: '오시는 길', href: '/company#location' },
     ],
   },
   {
     title: '제품소개',
     href: '/product',
     submenu: [
-      { title: '제품 카테고리1', href: '/product/category1' },
-      { title: '제품 카테고리2', href: '/product/category2' },
-      { title: '제품 카테고리3', href: '/product/category3' },
+      { title: '전력 시스템', href: '/product#category1' },
+      { title: '자동화 시스템', href: '/product#category2' },
+      { title: '부품 국산화', href: '/product#category3' },
+      { title: '기술 컨설팅', href: '/product#category4' },
+      { title: '기타', href: '/product#category5' },
     ],
   },
   { title: '공지사항', href: '/notice' },
-  { title: '고객지원', href: '/support' },
+  {
+    title: '고객지원',
+    href: '/support',
+    submenu: [
+      { title: '자주 묻는 질문', href: '/support/faq' },
+      { title: '제품 매뉴얼', href: '/support/manual' },
+      { title: '문의하기', href: '/support/contact' },
+    ],
+  },
 ];
 
 const Header = () => {
@@ -165,7 +175,7 @@ const Header = () => {
             <Link href="/" className="flex items-center">
               <div className="relative">
                 {/* 로고 이미지는 public 폴더에 추가 필요 */}
-                <div className={`font-bold text-4xl ${getTextColorClass()}`}>
+                <div className={`font-bold text-3xl ${getTextColorClass()}`}>
                   유진파워시스템
                 </div>
               </div>
@@ -190,7 +200,9 @@ const Header = () => {
                         : 'text-gray-800 hover:text-gray-200'
                     }`}
                   >
-                    {item.title}
+                    <div className={`text-lg ${getTextColorClass()}`}>
+                      {item.title}
+                    </div>
                   </Link>
 
                   {/* 서브메뉴 드롭다운 */}
@@ -227,6 +239,7 @@ const Header = () => {
             {/* 검색 버튼 */}
             <div className="relative">
               <button 
+                type="button"
                 className={`flex items-center ${getTextColorClass()}`}
                 onClick={toggleSearch}
                 aria-label={isSearchOpen ? '검색창 닫기' : '검색창 열기'}
@@ -238,6 +251,7 @@ const Header = () => {
             {/* 언어 선택 */}
             <div className="relative">
               <button 
+                type="button"
                 className={`flex items-center ${getTextColorClass()}`}
                 onClick={() => setActiveMenu(activeMenu === 'lang' ? null : 'lang')}
               >
@@ -252,10 +266,22 @@ const Header = () => {
                     exit={{ opacity: 0, y: 10 }}
                     className="absolute right-0 mt-1 bg-white shadow-lg rounded-md py-2 min-w-20 z-10"
                   >
-                    <button className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
+                    <button
+                      type="button"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveMenu(null);
+                      }}
+                    >
                       KOR
                     </button>
-                    <button className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
+                    <button
+                      type="button"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      onClick={() => {
+                        setActiveMenu(null);
+                      }}
+                    >
                       ENG
                     </button>
                   </motion.div>
@@ -276,6 +302,7 @@ const Header = () => {
 
             {/* 모바일 메뉴 버튼 */}
             <button
+              type="button"
               className={`lg:hidden p-2 ${getTextColorClass()}`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="메뉴 열기"
@@ -338,8 +365,18 @@ const Header = () => {
                 {/* 모바일 언어 선택 */}
                 <div className={`py-2 border-t mt-2 ${isHomePage && !isScrolled ? 'border-gray-700' : 'border-gray-200'}`}>
                   <span className={`block mb-2 ${isHomePage && !isScrolled ? 'text-gray-400' : 'text-gray-500'}`}>언어 선택</span>
-                  <button className={isHomePage && !isScrolled ? 'block text-white py-1' : 'block text-gray-800 py-1'}>한국어</button>
-                  <button className={isHomePage && !isScrolled ? 'block text-gray-400 py-1' : 'block text-gray-500 py-1'}>English</button>
+                  <button 
+                    type="button" 
+                    className={isHomePage && !isScrolled ? 'block text-white py-1' : 'block text-gray-800 py-1'}
+                  >
+                    한국어
+                  </button>
+                  <button 
+                    type="button" 
+                    className={isHomePage && !isScrolled ? 'block text-gray-400 py-1' : 'block text-gray-500 py-1'}
+                  >
+                    English
+                  </button>
                 </div>
               </div>
             </motion.div>
@@ -378,6 +415,7 @@ const Header = () => {
                   <FiSearch size={20} />
                 </div>
                 <button
+                  type="button"
                   className="absolute right-4 top-[19px] text-gray-700 hover:text-gray-900"
                   onClick={toggleSearch}
                 >
@@ -388,9 +426,10 @@ const Header = () => {
                 <div className="mt-4 bg-white rounded-lg p-3 shadow-sm border border-gray-100">
                   <div className="flex items-center flex-wrap gap-2">
                     <p className="text-sm text-gray-500 mr-2">추천 검색어:</p>
-                    {suggestedSearchTerms.map((term, index) => (
+                    {suggestedSearchTerms.map((term) => (
                       <button
-                        key={index}
+                        key={term}
+                        type="button"
                         onClick={() => handleSelectSearchTerm(term)}
                         className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm transition-colors"
                       >
