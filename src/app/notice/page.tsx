@@ -1,9 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import SidebarMenu, { SidebarMenuItem } from '@/components/layout/SidebarMenu';
+import TabNavigation from '@/components/layout/TabNavigation';
+import { containerStyle } from '@/styles/common';
 
 // 공지사항 목록
 const noticeData = [
@@ -56,16 +59,23 @@ const noticeData = [
 
 type CategoryFilterType = '전체' | '공지사항' | '보도자료' | '채용';
 
-// 스타일 정의
-const containerStyle = {
-  width: '95%',
-  maxWidth: '1800px',
-  margin: '0 auto',
-};
-
 const NoticePage = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilterType>('전체');
 
+  // URL 해시에 따라 탭 활성화
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      const validCategories = ['전체', '공지사항', '보도자료', '채용'] as CategoryFilterType[];
+      if (hash && validCategories.includes(hash as CategoryFilterType)) {
+        setActiveCategory(hash as CategoryFilterType);
+      }
+    };
+
+    handleHashChange(); // 초기 로드 시 실행
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const sortedNotices = [...noticeData].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   // 카테고리별 필터링
@@ -74,12 +84,13 @@ const NoticePage = () => {
     : sortedNotices.filter(notice => notice.category === activeCategory);
 
   // 사이드바 메뉴 아이템 정의
-  const sidebarMenuItems = [
+  const sidebarMenuItems: SidebarMenuItem[] = [
     { id: '전체', title: '전체', icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <title>전체 공지사항 아이콘</title>
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
       </svg>
-    )},
+    )}
   ];
 
   return (
@@ -106,69 +117,22 @@ const NoticePage = () => {
         </div>
       </div>
       {/* 탭 네비게이션 */}
-      <div className="bg-white sticky top-0 z-30 shadow-sm">
-        <div style={containerStyle} className="px-0">
-          <div className="sub-nav flex items-center justify-between py-2">
-            <div className="inner-box flex items-center">
-              <Link href="/" className="btn-home flex items-center justify-center w-12 h-12 text-gray-500 hover:text-blue-700 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-              </Link>
-              
-              <div className="nav-divider h-8 w-px bg-gray-200 mx-3"></div>
-              
-              <div className="relative">
-                <div className="flex items-center px-5 py-4 text-black-700 font-medium">
-                  <span>공지사항</span>
-                </div>
-              </div>
-              
-              <div className="nav-divider h-8 w-px bg-gray-200 mx-3"></div>
-              
-              <div className="relative">
-                <div className="flex items-center px-5 py-4 text-blue-700 font-medium">
-                  <span>{activeCategory}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <TabNavigation 
+        pageTitle="공지사항" 
+        activeTabName={activeCategory} 
+      />
 
       {/* 컨텐츠 영역 - 사이드바 메뉴와 컨텐츠 분리 */}
       <div style={containerStyle} className="py-8 grid grid-cols-1 md:grid-cols-6 gap-8">
         {/* 좌측 사이드바 메뉴 */}
         <div className="md:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div className="py-5 px-4 border-b border-gray-100">
-              <h2 className="text-lg font-bold text-gray-800">공지사항</h2>
-            </div>
-            <ul>
-              {sidebarMenuItems.map((item) => (
-                <li key={item.id} className="border-b border-gray-50 last:border-b-0">
-                  <button
-                    onClick={() => setActiveCategory(item.id as CategoryFilterType)}
-                    className={`w-full flex items-center px-4 py-3.5 text-left transition-colors ${
-                      activeCategory === item.id 
-                        ? 'bg-blue-50 text-blue-700 font-medium border-l-4 border-blue-700' 
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent'
-                    }`}
-                  >
-                    <span className="mr-3 opacity-70">{item.icon}</span>
-                    <span>{item.title}</span>
-                    {activeCategory === item.id && (
-                      <span className="ml-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </span>
-                    )}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <SidebarMenu
+            title="공지사항"
+            menuItems={sidebarMenuItems}
+            activeTab={activeCategory}
+            setActiveTab={(id) => setActiveCategory(id as CategoryFilterType)}
+            useHash={true}
+          />
         </div>
 
         {/* 우측 컨텐츠 영역 */}
@@ -237,6 +201,7 @@ const NoticePage = () => {
           <div className="flex justify-center mt-8">
             <nav className="inline-flex rounded-md shadow">
               <button
+                type="button"
                 className="py-2 px-4 bg-white border border-gray-300 rounded-l-md text-gray-500 hover:bg-gray-50"
                 aria-label="이전 페이지"
                 disabled
@@ -244,17 +209,20 @@ const NoticePage = () => {
                 이전
               </button>
               <button
+                type="button"
                 className="py-2 px-4 bg-blue-700 text-white border border-blue-700"
                 aria-current="page"
               >
                 1
               </button>
               <button
+                type="button"
                 className="py-2 px-4 bg-white border border-gray-300 text-gray-500 hover:bg-gray-50"
               >
                 2
               </button>
               <button
+                type="button"
                 className="py-2 px-4 bg-white border border-gray-300 rounded-r-md text-gray-500 hover:bg-gray-50"
                 aria-label="다음 페이지"
               >

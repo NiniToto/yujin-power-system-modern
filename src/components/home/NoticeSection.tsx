@@ -5,8 +5,7 @@ import { motion, useInView, useAnimation } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 
-// 더미 뉴스 데이터
-const newsList = [
+const noticeList = [
   {
     id: 1,
     title: '유진파워시스템, 신제품 출시 행사 성황리에 마쳐',
@@ -36,7 +35,7 @@ const newsList = [
   },
 ];
 
-const NewsSection = () => {
+const NoticeSection = () => {
   const controls = useAnimation();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
@@ -69,25 +68,25 @@ const NewsSection = () => {
   return (
     <section className="pt-20 bg-white" ref={ref}>
       {/* 상단 구분선 */}
-      <div className="container-wrapper">
+      <div className="container-fluid mx-auto px-4 md:px-8 lg:px-16 xl:px-20 max-w-[1780px]">
         <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
         <div className="border-t border-gray-200 mb-8 pt-2"/>
       </div>
-      <div className="container-wrapper">
+      <div className="container-fluid mx-auto px-4 md:px-8 lg:px-16 xl:px-20 max-w-[1780px]">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-black mb-2">
-              News
+              Notice
             </h2>
             <p className="text-gray-600 mb-4 md:mb-0">
-              유진파워시스템의 최신 소식과 뉴스를 확인하세요
+              유진파워시스템의 공지사항을 확인하세요
             </p>
           </div>
           <Link
             href="/notice"
             className="inline-flex items-center text-primary font-medium hover:underline"
           >
-            모든 소식 보기
+            모든 공지사항 보기
             <svg
               className="w-4 h-4 ml-1"
               fill="none"
@@ -95,6 +94,7 @@ const NewsSection = () => {
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
+              <title>더보기 화살표</title>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -111,37 +111,37 @@ const NewsSection = () => {
           initial="hidden"
           animate={controls}
         >
-          {newsList.map((news) => (
+          {noticeList.map((notice) => (
             <motion.div
-              key={news.id}
+              key={notice.id}
               className="bg-gray-50 rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
               variants={itemVariants}
             >
               <div className="h-48 bg-gray-200 relative">
                 {/* News Image */}
                 { <Image
-                  src={news.image}
-                  alt={news.title}
+                  src={notice.image}
+                  alt={notice.title}
                   fill
                   className="object-cover"
                 />}
                 
                 {/* 임시 색상 배경 */}
-                <div className="absolute inset-0 bg-primary opacity-20"></div>
+                <div className="absolute inset-0 bg-primary opacity-20"/>
                 
                 <div className="absolute top-4 left-4 bg-primary text-white text-sm px-3 py-1 rounded">
-                  {news.category}
+                  {notice.category}
                 </div>
               </div>
               
               <div className="p-6">
-                <div className="text-gray-500 text-sm mb-3">{news.date}</div>
+                <div className="text-gray-500 text-sm mb-3">{notice.date}</div>
                 <h3 className="text-xl font-bold mb-3 text-gray-800 line-clamp-2">
-                  {news.title}
+                  {notice.title}
                 </h3>
-                <p className="text-gray-600 mb-4 line-clamp-3">{news.summary}</p>
+                <p className="text-gray-600 mb-4 line-clamp-3">{notice.summary}</p>
                 <Link
-                  href={news.link}
+                  href={notice.link}
                   className="inline-flex items-center text-primary font-medium hover:underline"
                 >
                   자세히 보기
@@ -152,6 +152,7 @@ const NewsSection = () => {
                     viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
                   >
+                    <title>더보기 화살표</title>
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -169,4 +170,4 @@ const NewsSection = () => {
   );
 };
 
-export default NewsSection; 
+export default NoticeSection; 
