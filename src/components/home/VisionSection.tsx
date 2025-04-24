@@ -40,7 +40,7 @@ const VisionSection = () => {
           
           <div className="mt-10">
             <Link 
-              href="/company#vision"
+              href="/company/vision"
               className="inline-flex items-center text-white-700 font-medium hover:opacity-90 transition-opacity group"
             >
               <span className="mr-2">MORE</span>
