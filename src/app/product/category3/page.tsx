@@ -7,32 +7,36 @@ import TabNavigation from '@/components/layout/TabNavigation';
 import { containerStyle } from '@/styles/common';
 
 const categoryData = {
-  id: 'category1',
-  title: '전력 시스템',
-  description: '안정적인 전력 공급을 위한 첨단 시스템 제품군입니다.',
+  id: 'category3',
+  title: '부품 국산화',
+  description: '수입 의존도를 낮추고 국내 기술력을 높이는 국산화 부품입니다.',
   icon: (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <title>전력 시스템 아이콘</title>
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+      <title>부품 국산화 아이콘</title>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
     </svg>
   ),
   products: [
-    { id: 'p101', name: '고압 전력 모듈', image: '/product-p101.jpg' },
-    { id: 'p102', name: '전력 변환 장치', image: '/product-p102.jpg' },
-    { id: 'p103', name: '전력 관리 시스템', image: '/product-p103.jpg' },
-    { id: 'p104', name: '스마트 배터리 관리 시스템', image: '/product-p104.jpg' },
-    { id: 'p105', name: '무정전 전원 공급 장치', image: '/product-p105.jpg' },
-    { id: 'p106', name: '전력 품질 모니터링 시스템', image: '/product-p106.jpg' },
+    { id: 'p301', name: '커스텀 밸브 시스템', image: '/product-p301.jpg' },
+    { id: 'p302', name: '정밀 기계 부품', image: '/product-p302.jpg' },
+    { id: 'p303', name: '제어 시스템 모듈', image: '/product-p303.jpg' },
+    { id: 'p304', name: '특수 센서 어셈블리', image: '/product-p304.jpg' },
+    { id: 'p305', name: '고내구성 커넥터 시스템', image: '/product-p305.jpg' },
+    { id: 'p306', name: '맞춤형 PCB 설계', image: '/product-p306.jpg' },
   ]
 };
 
-// Sidebar 메뉴 데이터 동일하게 복사 (전체 카테고리)
 const sidebarMenuItems = [
   {
     id: 'category1',
     title: '전력 시스템',
     href: '/product/category1',
-    icon: categoryData.icon,
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <title>전력 시스템 아이콘</title>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    ),
   },
   {
     id: 'category2',
@@ -81,10 +85,10 @@ const sidebarMenuItems = [
   },
 ];
 
-export default function ProductCategory1Page() {
+export default function ProductCategory3Page() {
   return (
     <>
-      {/* 상단 헤더 */}
+      {/* 페이지 헤더 */}
       <div className="relative h-[350px] pt-20 flex items-center justify-center text-center overflow-hidden z-10">
         <div className="absolute inset-0 z-0">
           <Image
@@ -103,11 +107,10 @@ export default function ProductCategory1Page() {
         </div>
       </div>
 
-      {/* 탭 네비게이션 */}
       <TabNavigation pageTitle="제품소개" activeTabName={categoryData.title} />
 
-      {/* 컨텐츠 및 사이드바 */}
       <div style={containerStyle} className="py-8 grid grid-cols-1 md:grid-cols-6 gap-8">
+        {/* 좌측 사이드바 */}
         <div className="md:col-span-1">
           <SidebarMenu
             title="제품 카테고리"
@@ -116,6 +119,8 @@ export default function ProductCategory1Page() {
             setActiveTab={() => {}}
           />
         </div>
+
+        {/* 우측 컨텐츠 */}
         <div className="md:col-span-5">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -124,7 +129,6 @@ export default function ProductCategory1Page() {
             className="w-full"
           >
             <div className="bg-white rounded-lg overflow-hidden shadow-md p-6">
-              {/* 카테고리 헤더 섹션 */}
               <div className="mb-8 border-b pb-6">
                 <div className="flex items-center mb-4">
                   <span className="text-blue-700 mr-3">{categoryData.icon}</span>
@@ -137,18 +141,15 @@ export default function ProductCategory1Page() {
                 </p>
               </div>
 
-              {/* 상세 제품 리스트 섹션 */}
               <h3 className="text-xl font-semibold mb-6 text-gray-900">
                 {categoryData.title} 제품군
               </h3>
-
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {categoryData.products.map((product) => (
                   <div
                     key={product.id}
                     className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                   >
-                    {/* 제품 이미지 */}
                     <div className="relative h-48 bg-gray-100 overflow-hidden">
                       {product.image ? (
                         <Image
@@ -163,13 +164,10 @@ export default function ProductCategory1Page() {
                         </div>
                       )}
                     </div>
-
-                    {/* 제품 정보 */}
                     <div className="p-4">
                       <h4 className="font-medium text-lg mb-2 text-gray-900 hover:text-blue-700 transition-colors">
                         {product.name}
                       </h4>
-                      {/* 메타 정보 */}
                       <div className="flex items-center justify-between text-sm text-gray-500 mt-4">
                         <div className="flex items-center">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -183,7 +181,6 @@ export default function ProductCategory1Page() {
                           <span>2023.06.15</span>
                         </div>
                       </div>
-                      {/* 상세보기 버튼 */}
                       <button
                         type="button"
                         className="mt-4 w-full bg-gray-50 hover:bg-gray-100 text-gray-700 py-2 rounded-md text-sm transition-colors flex items-center justify-center"
@@ -199,7 +196,6 @@ export default function ProductCategory1Page() {
                 ))}
               </div>
 
-              {/* 카테고리 바닥글 */}
               <div className="mt-10 pt-6 border-t border-gray-200 text-center">
                 <p className="text-gray-600 max-w-2xl mx-auto">
                   더 자세한 제품 정보와 기술 지원이 필요하시면 언제든지 문의해 주세요.<br />
