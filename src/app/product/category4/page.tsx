@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import SidebarMenu from '@/components/layout/SidebarMenu';
 import TabNavigation from '@/components/layout/TabNavigation';
 import { containerStyle } from '@/styles/common';
@@ -17,12 +18,12 @@ const categoryData = {
     </svg>
   ),
   products: [
-    { id: 'p401', name: '시스템 최적화 컨설팅', image: '/product-p401.jpg' },
-    { id: 'p402', name: '에너지 효율화 솔루션', image: '/product-p402.jpg' },
-    { id: 'p403', name: '자동화 시스템 설계', image: '/product-p403.jpg' },
-    { id: 'p404', name: '산업 안전 프로세스 컨설팅', image: '/product-p404.jpg' },
-    { id: 'p405', name: '스마트 팩토리 구축 자문', image: '/product-p405.jpg' },
-    { id: 'p406', name: '품질 관리 시스템 구축', image: '/product-p406.jpg' },
+    { id: 'p401', name: '시스템 최적화 컨설팅', image: '/asset/images/product1.png' },
+    { id: 'p402', name: '에너지 효율화 솔루션', image: '/asset/images/product2.png' },
+    { id: 'p403', name: '자동화 시스템 설계', image: '/asset/images/product3.png' },
+    { id: 'p404', name: '산업 안전 프로세스 컨설팅', image: '/asset/images/product4.png' },
+    { id: 'p405', name: '스마트 팩토리 구축 자문', image: '/asset/images/product5.png' },
+    { id: 'p406', name: '품질 관리 시스템 구축', image: '/asset/images/product5.png' },
   ]
 };
 
@@ -65,12 +66,7 @@ const sidebarMenuItems = [
     id: 'category4',
     title: '기술 컨설팅',
     href: '/product/category4',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <title>기술 컨설팅 아이콘</title>
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-      </svg>
-    ),
+    icon: categoryData.icon,
   },
   {
     id: 'category5',
@@ -88,6 +84,7 @@ const sidebarMenuItems = [
 export default function ProductCategory4Page() {
   return (
     <>
+      {/* 헤더 */}
       <div className="relative h-[350px] pt-20 flex items-center justify-center text-center overflow-hidden z-10">
         <div className="absolute inset-0 z-0">
           <Image
@@ -109,6 +106,7 @@ export default function ProductCategory4Page() {
       <TabNavigation pageTitle="제품소개" activeTabName={categoryData.title} />
 
       <div style={containerStyle} className="py-8 grid grid-cols-1 md:grid-cols-6 gap-8">
+        {/* 좌측 사이드바 */}
         <div className="md:col-span-1">
           <SidebarMenu
             title="제품 카테고리"
@@ -117,6 +115,8 @@ export default function ProductCategory4Page() {
             setActiveTab={() => {}}
           />
         </div>
+
+        {/* 우측 컨텐츠 */}
         <div className="md:col-span-5">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -141,24 +141,20 @@ export default function ProductCategory4Page() {
                 {categoryData.title} 제품군
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categoryData.products.map((product) => (
+                {categoryData.products.map((product, idx) => (
                   <div
                     key={product.id}
                     className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                   >
                     <div className="relative h-48 bg-gray-100 overflow-hidden">
-                      {product.image ? (
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          fill
-                          className="object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
-                          <span className="text-gray-400">이미지 준비중</span>
-                        </div>
-                      )}
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-cover hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        priority={idx < 2}
+                      />
                     </div>
                     <div className="p-4">
                       <h4 className="font-medium text-lg mb-2 text-gray-900 hover:text-blue-700 transition-colors">
@@ -177,8 +173,8 @@ export default function ProductCategory4Page() {
                           <span>2023.06.15</span>
                         </div>
                       </div>
-                      <button
-                        type="button"
+                      <Link
+                        href={`/product/category4/${product.id}`}
                         className="mt-4 w-full bg-gray-50 hover:bg-gray-100 text-gray-700 py-2 rounded-md text-sm transition-colors flex items-center justify-center"
                       >
                         <span>상세 정보</span>
@@ -186,7 +182,7 @@ export default function ProductCategory4Page() {
                           <title>화살표 아이콘</title>
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 ))}
