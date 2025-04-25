@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import SidebarMenu from '@/components/layout/SidebarMenu';
 import TabNavigation from '@/components/layout/TabNavigation';
 import { containerStyle } from '@/styles/common';
@@ -17,16 +18,14 @@ const categoryData = {
     </svg>
   ),
   products: [
-    { id: 'p101', name: '고압 전력 모듈', image: '/product-p101.jpg' },
-    { id: 'p102', name: '전력 변환 장치', image: '/product-p102.jpg' },
-    { id: 'p103', name: '전력 관리 시스템', image: '/product-p103.jpg' },
-    { id: 'p104', name: '스마트 배터리 관리 시스템', image: '/product-p104.jpg' },
-    { id: 'p105', name: '무정전 전원 공급 장치', image: '/product-p105.jpg' },
-    { id: 'p106', name: '전력 품질 모니터링 시스템', image: '/product-p106.jpg' },
+    { id: 'p101', name: '고압 전력 모듈', image: '/asset/images/product1.png' },
+    { id: 'p102', name: '전력 변환 장치', image: '/asset/images/product2.png' },
+    { id: 'p103', name: '전력 관리 시스템', image: '/asset/images/product3.png' },
+    { id: 'p104', name: '스마트 배터리 관리 시스템', image: '/asset/images/product4.png' },
+    { id: 'p105', name: '무정전 전원 공급 장치', image: '/asset/images/product5.png' },
   ]
 };
 
-// Sidebar 메뉴 데이터 동일하게 복사 (전체 카테고리)
 const sidebarMenuItems = [
   {
     id: 'category1',
@@ -143,25 +142,21 @@ export default function ProductCategory1Page() {
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categoryData.products.map((product) => (
+                {categoryData.products.map((product, idx) => (
                   <div
                     key={product.id}
                     className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                   >
                     {/* 제품 이미지 */}
                     <div className="relative h-48 bg-gray-100 overflow-hidden">
-                      {product.image ? (
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          fill
-                          className="object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
-                          <span className="text-gray-400">이미지 준비중</span>
-                        </div>
-                      )}
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-cover hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        priority={idx < 2}
+                      />
                     </div>
 
                     {/* 제품 정보 */}
@@ -184,16 +179,16 @@ export default function ProductCategory1Page() {
                         </div>
                       </div>
                       {/* 상세보기 버튼 */}
-                      <button
-                        type="button"
+                      <Link
+                        href={`/product/category1/${product.id}`}
                         className="mt-4 w-full bg-gray-50 hover:bg-gray-100 text-gray-700 py-2 rounded-md text-sm transition-colors flex items-center justify-center"
                       >
                         <span>상세 정보</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
                           <title>화살표 아이콘</title>
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 ))}
