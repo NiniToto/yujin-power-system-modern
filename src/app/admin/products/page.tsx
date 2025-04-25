@@ -292,6 +292,7 @@ export default function ProductsPage() {
   const removeSpecification = (key: string) => {
     if (!currentProduct) return;
     
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { [key]: _, ...restSpecs } = currentProduct.specifications;
     
     setCurrentProduct({

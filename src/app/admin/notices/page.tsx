@@ -100,20 +100,21 @@ export default function NoticesPage() {
   });
   const [isEditing, setIsEditing] = useState<boolean>(false);
   
-  // 인증 체크
-  useEffect(() => {
-    const checkAuth = () => {
-      const isLoggedIn = localStorage.getItem("adminLoggedIn") === "true";
-      setIsAuthenticated(isLoggedIn);
-      setIsLoading(false);
-      
-      if (!isLoggedIn) {
-        router.push("/admin/login");
-      }
-    };
+  // 인증 체크 함수 (관리자 로그인 여부 확인)
+  const checkAuth = () => {
+    const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+    const isAuthenticated = isLoggedIn;
     
-    checkAuth();
-  }, [router]);
+    // 인증 상태에 따른 페이지 타이틀 설정
+    const pageTitle = isAuthenticated ? '공지사항 관리' : '로그인이 필요합니다';
+    console.log(pageTitle);
+    
+    if (!isLoggedIn) {
+      router.push('/admin/login');
+      return false;
+    }
+    return true;
+  };
 
   // 검색 처리
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {

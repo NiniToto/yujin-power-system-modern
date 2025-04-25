@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -57,6 +57,9 @@ const noticeData = [
   }
 ];
 
+// 카테고리 필터 타입 정의
+type CategoryFilter = "전체" | "공지사항" | "이벤트" | "뉴스" | "보도자료";
+
 // 사이드바 메뉴 아이템(전체만 표시)
 const sidebarMenuItems: SidebarMenuItem[] = [
   {
@@ -73,11 +76,20 @@ const sidebarMenuItems: SidebarMenuItem[] = [
 ];
 
 export default function NoticePage() {
-  // 카테고리 필터는 전체만 사용
-  const [activeCategory] = useState('전체');
+  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("전체");
+  
+  // 선택된 카테고리에 따라 공지사항 필터링
+  const filteredNotices = useMemo(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const activeCategory = selectedCategory;
+    
+    return selectedCategory === "전체"
+      ? noticeData
+      : noticeData.filter((notice) => notice.category === selectedCategory);
+  }, [selectedCategory]);
 
   // 최신순 정렬
-  const sortedNotices = [...noticeData].sort((a, b) =>
+  const sortedNotices = [...filteredNotices].sort((a, b) =>
     new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
