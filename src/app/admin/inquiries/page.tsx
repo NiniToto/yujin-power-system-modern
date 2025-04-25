@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { FaSearch, FaTrash, FaEnvelope, FaEnvelopeOpen, FaCheck, FaTimes, FaReply } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
@@ -84,7 +84,8 @@ const initialInquiries: InquiryData[] = [
   }
 ];
 
-export default function InquiriesPage() {
+// 검색 파라미터를 사용하는 컴포넌트
+function InquiriesContent() {
   const searchParams = useSearchParams();
   
   // 상태 관리
@@ -601,5 +602,14 @@ export default function InquiriesPage() {
         </div>
       )}
     </AdminLayout>
+  );
+}
+
+// 메인 페이지 컴포넌트
+export default function InquiriesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-gray-50">로딩 중...</div>}>
+      <InquiriesContent />
+    </Suspense>
   );
 } 
