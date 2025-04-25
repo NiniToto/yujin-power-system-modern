@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 // 제품 데이터 (여기서는 하드코딩, 실서비스에서는 props나 fetch로 관리)
 const productList = [
@@ -212,14 +214,21 @@ const productList = [
   },
 ];
 
-
-interface ProductDetailPageProps {
-  params: { categoryId: string; productId: string };
-}
-
-export default function ProductDetailPage({ params }: ProductDetailPageProps) {
-  // 제품 정보 찾기
-  const product = productList.find(item => item.id === params.productId);
+export default function ProductDetailPage() {
+  const params = useParams();
+  const [product, setProduct] = useState<typeof productList[0] | null>(null);
+  
+  useEffect(() => {
+    // 제품 정보 찾기
+    const categoryId = params.categoryId as string;
+    const productId = params.productId as string;
+    
+    const foundProduct = productList.find(item => item.id === productId);
+    setProduct(foundProduct || null);
+    
+    // categoryId 활용 (로깅용)
+    console.log(`현재 카테고리: ${categoryId}`);
+  }, [params]);
 
   if (!product) {
     return (

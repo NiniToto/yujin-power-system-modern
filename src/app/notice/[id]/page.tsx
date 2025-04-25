@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
@@ -50,20 +50,15 @@ const noticeData = [
   }
 ];
 
-interface NoticeDetailPageProps {
-  params: {
-    id: string;
-  };
-}
-
-const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
+export default function NoticeDetailPage() {
   const router = useRouter();
+  const params = useParams();
   const [notice, setNotice] = useState<(typeof noticeData)[0] | null>(null);
   const [otherNotices, setOtherNotices] = useState<typeof noticeData>([]);
   
   useEffect(() => {
     // 공지사항 ID로 데이터 찾기
-    const id = parseInt(params.id);
+    const id = parseInt(params.id as string);
     const currentNotice = noticeData.find(item => item.id === id);
     
     if (currentNotice) {
@@ -78,7 +73,7 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
       // 존재하지 않는 공지사항인 경우 목록으로 리다이렉트
       router.push('/notice');
     }
-  }, [params.id, router]);
+  }, [params.id, router, params]);
 
   if (!notice) {
     return (
@@ -265,6 +260,4 @@ const NoticeDetailPage = ({ params }: NoticeDetailPageProps) => {
       </div>
     </>
   );
-};
-
-export default NoticeDetailPage; 
+} 
